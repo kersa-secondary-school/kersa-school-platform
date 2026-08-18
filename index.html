@@ -1,0 +1,2123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kersa Secondary School — Connected Academic Platform</title>
+    
+    <!-- Fonts & FontAwesome Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700;9..144,900&family=Manrope:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* ===== ALL EXISTING CSS (unchanged) ===== */
+        :root {
+            --ink: #1c1b18; 
+            --paper: #fbf6ea; 
+            --panel: #ffffff;
+            --forest: #0f3d2e; 
+            --forest-light: #17573f; 
+            --forest-pale: #e6efe9;
+            --gold: #f2a93b; 
+            --coral: #e2543c; 
+            --sky: #3c86a6;
+            --line: rgba(15, 61, 46, .14); 
+            --muted: #726d60; 
+            --radius: 14px;
+            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background: var(--paper); color: var(--ink); font-family: 'Manrope', sans-serif; font-size: 15px; line-height: 1.6; overflow-x: hidden; }
+        .mono { font-family: 'Space Mono', monospace; }
+        h1, h2, h3, h4 { font-family: 'Fraunces', serif; color: var(--forest); }
+        button, input, select, textarea { font-family: inherit; }
+        .wrap { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+        /* Magical Floating Animation */
+        .magical-float-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        .magical-sparkle {
+            position: absolute;
+            pointer-events: none;
+            animation: sparkleFloat 10s infinite ease-in-out;
+            opacity: 0.7;
+            font-size: 20px;
+        }
+        @keyframes sparkleFloat {
+            0%, 100% { transform: translateY(0) translateX(0) rotate(0deg) scale(1); opacity: 0.3; }
+            25% { transform: translateY(-120px) translateX(80px) rotate(180deg) scale(1.3); opacity: 0.8; }
+            50% { transform: translateY(-250px) translateX(-40px) rotate(360deg) scale(0.9); opacity: 0.5; }
+            75% { transform: translateY(-80px) translateX(-120px) rotate(540deg) scale(1.4); opacity: 0.9; }
+        }
+        .magical-orb {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: orbDrift 15s infinite ease-in-out;
+            filter: blur(3px);
+        }
+        @keyframes orbDrift {
+            0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.2; }
+            20% { transform: translate(150px, -200px) scale(1.5); opacity: 0.5; }
+            40% { transform: translate(-100px, -350px) scale(0.8); opacity: 0.3; }
+            60% { transform: translate(200px, -150px) scale(1.2); opacity: 0.6; }
+            80% { transform: translate(-150px, -250px) scale(1.6); opacity: 0.4; }
+        }
+        .magical-star {
+            position: absolute;
+            pointer-events: none;
+            animation: starTwinkle 5s infinite ease-in-out;
+        }
+        @keyframes starTwinkle {
+            0%, 100% { opacity: 0.2; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        /* Learning Animation */
+        .learning-animation {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
+        }
+        .subject-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 35px;
+            animation: floatSubject 3s ease-in-out infinite;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+        }
+        .subject-icon:hover {
+            transform: scale(1.15);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        .subject-icon:nth-child(1) { background: linear-gradient(135deg, #667eea, #764ba2); animation-delay: 0s; }
+        .subject-icon:nth-child(2) { background: linear-gradient(135deg, #f093fb, #f5576c); animation-delay: 0.5s; }
+        .subject-icon:nth-child(3) { background: linear-gradient(135deg, #4facfe, #00f2fe); animation-delay: 1s; }
+        .subject-icon:nth-child(4) { background: linear-gradient(135deg, #43e97b, #38f9d7); animation-delay: 1.5s; }
+        .subject-icon:nth-child(5) { background: linear-gradient(135deg, #fa709a, #fee140); animation-delay: 2s; }
+        .subject-icon:nth-child(6) { background: linear-gradient(135deg, #30cfd0, #330867); animation-delay: 2.5s; }
+        
+        @keyframes floatSubject {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        #splash { 
+            position: fixed; inset: 0; background: var(--forest); z-index: 9999; 
+            display: flex; flex-direction: column; align-items: center; justify-content: center; 
+            text-align: center; padding: 24px; cursor: pointer;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+        #splash.fade-out { opacity: 0; visibility: hidden; pointer-events: none; }
+        #splash .logo { font-size: 64px; animation: bounceFloat 2.5s ease-in-out infinite; margin-bottom: 12px; }
+        #splash h1 { color: #fff; font-size: clamp(26px, 4.5vw, 42px); line-height: 1.2; animation: wordFloat 3s ease-in-out infinite; }
+        #splash .welcome { color: var(--gold); font-size: clamp(15px, 2.8vw, 20px); margin-top: 14px; font-family: 'Fraunces', serif; max-width: 760px; animation: wordFloat 3.5s ease-in-out infinite; }
+        #splash .built { color: rgba(255,255,255,0.9); font-size: 14px; margin-top: 24px; font-weight: 700; font-family: 'Space Mono', monospace; animation: pulseGlow 2s infinite; }
+        #splash .skip-hint { margin-top: 16px; font-size: 12px; color: var(--gold); border: 1px dashed var(--gold); padding: 6px 16px; border-radius: 20px; font-weight: 600; }
+
+        @keyframes wordFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+        @keyframes bounceFloat { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-18px) scale(1.05); } }
+        @keyframes pulseGlow { 0%, 100% { opacity: .6; } 50% { opacity: 1; } }
+
+        header.site { position: sticky; top: 0; z-index: 100; background: rgba(251,246,234,.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+        nav { display: flex; align-items: center; justify-content: space-between; padding: 14px 20px; max-width: 1200px; margin: 0 auto; gap: 10px; }
+        .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; cursor: pointer; }
+        .brand-mark { width: 44px; height: 44px; border-radius: 12px; background: conic-gradient(from 200deg, var(--forest), var(--gold), var(--coral), var(--forest)); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 800; font-size: 20px; box-shadow: 0 4px 12px rgba(15,61,46,0.25); }
+        .brand-name { font-weight: 800; font-size: 18px; color: var(--forest); font-family: 'Fraunces', serif; line-height: 1.1; }
+        .brand-sub { font-size: 9.5px; letter-spacing: .08em; opacity: .75; font-family: 'Space Mono', monospace; color: var(--ink); }
+        
+        .hamburger { display: none; background: none; border: 2px solid var(--forest); border-radius: 8px; padding: 6px 12px; font-size: 18px; color: var(--forest); cursor: pointer; }
+        .nav-links { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; list-style: none; }
+        .nav-links a { font-weight: 600; font-size: 13.5px; color: var(--ink); text-decoration: none; cursor: pointer; padding: 6px 10px; border-radius: 8px; transition: var(--transition); }
+        .nav-links a:hover { background: var(--forest-pale); color: var(--forest); }
+
+        .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.6); z-index: 150; backdrop-filter: blur(3px); }
+        .sidebar-overlay.show { display: block; }
+        .sidebar { position: fixed; top: 0; left: -290px; width: 290px; height: 100vh; background: var(--forest); z-index: 200; transition: left .3s ease; padding: 24px 20px; display: flex; flex-direction: column; gap: 8px; }
+        .sidebar.open { left: 0; }
+        .sidebar .close-btn { align-self: flex-end; background: none; border: none; color: #fff; font-size: 24px; cursor: pointer; margin-bottom: 12px; }
+        .sidebar a { color: #fff; text-decoration: none; padding: 10px 14px; border-radius: 8px; font-weight: 600; font-size: 14px; display: flex; align-items: center; gap: 10px; }
+        .sidebar a:hover { background: rgba(255,255,255,.12); }
+
+        .btn { border: none; border-radius: 999px; padding: 11px 22px; font-weight: 700; font-size: 13.5px; display: inline-flex; align-items: center; gap: 8px; cursor: pointer; transition: var(--transition); text-decoration: none; }
+        .btn-primary { background: var(--coral); color: #fff; }
+        .btn-primary:hover { background: #c9432c; transform: translateY(-2px); box-shadow: 0 6px 18px rgba(226,84,60,0.35); }
+        .btn-ghost { background: transparent; border: 2px solid var(--forest); color: var(--forest); }
+        .btn-ghost:hover { background: var(--forest); color: #fff; }
+        .btn-sm { padding: 6px 14px; font-size: 12px; }
+
+        section { padding: 50px 0; position: relative; z-index: 1; }
+        .section-head { margin-bottom: 25px; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 10px; }
+        .section-head h2 { font-size: clamp(22px, 3.5vw, 32px); }
+        .grid3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        
+        .card { background: #fff; border-radius: var(--radius); padding: 22px; border: 1px solid var(--line); transition: var(--transition); display: flex; flex-direction: column; justify-content: space-between; }
+        .card:hover { transform: translateY(-4px); box-shadow: 0 14px 32px rgba(15,61,46,0.12); }
+        .card h4 { font-size: 16.5px; margin-bottom: 6px; color: var(--forest); }
+        .card p { font-size: 13.5px; color: #5c584f; line-height: 1.5; }
+        .card img { width: 100%; height: auto; border-radius: 10px; margin-bottom: 12px; background: #e2e8f0; }
+        
+        .tag { display: inline-block; font-size: 10px; padding: 3px 10px; border-radius: 999px; font-weight: 700; text-transform: uppercase; margin-bottom: 8px; font-family: 'Space Mono', monospace; width: fit-content; }
+        .tag.exam { background: #fde3d9; color: var(--coral); }
+        .tag.notice { background: #fdeecb; color: #a8730f; }
+        .tag.event { background: #ddeef2; color: var(--sky); }
+        .when { margin-top: 10px; font-size: 11px; opacity: .65; font-family: 'Space Mono', monospace; }
+
+        /* Gallery & Story Actions */
+        .gallery-actions, .story-actions {
+            display: flex;
+            gap: 12px;
+            margin: 10px 0;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .action-btn {
+            background: none;
+            border: 1px solid var(--line);
+            border-radius: 20px;
+            padding: 5px 12px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: var(--muted);
+        }
+        .action-btn:hover {
+            background: var(--forest-pale);
+            border-color: var(--forest);
+            color: var(--forest);
+        }
+        .action-btn.active {
+            color: var(--coral);
+            border-color: var(--coral);
+        }
+        .comment-section {
+            background: #faf8f2;
+            border-radius: 8px;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid var(--line);
+        }
+        .comment-list {
+            max-height: 120px;
+            overflow-y: auto;
+            margin-bottom: 8px;
+        }
+        .comment-item {
+            font-size: 12.5px;
+            padding: 5px 0;
+            border-bottom: 1px dashed var(--line);
+        }
+        .comment-item strong {
+            color: var(--forest);
+        }
+        .comment-input {
+            display: flex;
+            gap: 6px;
+        }
+        .comment-input input {
+            flex: 1;
+            padding: 6px 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 12.5px;
+        }
+        .comment-input button {
+            background: var(--forest);
+            color: #fff;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        /* ===== FIXED: Celebration Animations (from top) ===== */
+        .falling-heart {
+            position: fixed;
+            top: -30px;
+            pointer-events: none;
+            font-size: 24px;
+            animation: heartFall 1.5s ease-out forwards;
+            z-index: 10000;
+        }
+        @keyframes heartFall {
+            0% { opacity: 1; transform: translateY(0) rotate(0deg); }
+            100% { opacity: 0; transform: translateY(110vh) rotate(360deg); }
+        }
+        .confetti {
+            position: fixed;
+            top: -20px;
+            pointer-events: none;
+            width: 10px;
+            height: 10px;
+            animation: confettiFall 1.8s ease-out forwards;
+            z-index: 10000;
+        }
+        @keyframes confettiFall {
+            0% { opacity: 1; transform: translateY(0) rotate(0deg); }
+            100% { opacity: 0; transform: translateY(110vh) rotate(720deg); }
+        }
+
+        .reg-card { background: #fff; border-radius: 18px; padding: 32px; box-shadow: 0 12px 36px rgba(15,61,46,.08); display: grid; grid-template-columns: 1fr 1fr; gap: 18px; border: 1px solid var(--line); }
+        .field { margin-bottom: 4px; display: flex; flex-direction: column; gap: 4px; }
+        .field label { font-size: 11px; font-weight: 700; color: var(--forest); text-transform: uppercase; letter-spacing: .05em; font-family: 'Space Mono', monospace; }
+        
+        .field input, .field select, .field textarea, input[type="text"], input[type="password"], input[type="tel"], input[type="email"], input[type="file"] {
+            width: 100%; padding: 11px 14px; border-radius: 10px; border: 2px solid #cbd5e1; font-family: inherit; font-size: 14px;
+            color: #0f172a !important; background-color: #ffffff !important; opacity: 1 !important; outline: none; transition: var(--transition);
+        }
+        .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--forest); box-shadow: 0 0 0 3px rgba(15,61,46,0.15); }
+
+        footer { background: var(--forest); color: #fff; padding: 44px 0 24px; margin-top: 50px; }
+        .foot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 28px; }
+        .foot-grid h5 { color: var(--gold); font-size: 12px; text-transform: uppercase; margin-bottom: 12px; font-family: 'Space Mono', monospace; }
+        .foot-grid a, .foot-grid p { color: #fff; text-decoration: none; font-size: 13.5px; opacity: .88; display: block; margin-bottom: 6px; }
+        .foot-bottom { text-align: center; padding-top: 22px; border-top: 1px solid rgba(255,255,255,.15); font-size: 12.5px; opacity: .8; margin-top: 25px; cursor: pointer; user-select: none; }
+
+        .dashboard-view { display: none; background: #f4efdf; min-height: 100vh; }
+        .dashboard-view.active { display: block; }
+        .public-view.hidden { display: none; }
+        .dashboard-layout { display: grid; grid-template-columns: 260px 1fr; min-height: 100vh; }
+        
+        .dashboard-sidebar { background: var(--forest); color: #fff; padding: 22px 18px; display: flex; flex-direction: column; justify-content: space-between; min-height: 100vh; }
+        .dashboard-nav { flex: 1; }
+        .navitem { display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-radius: 10px; color: rgba(255,255,255,.85); font-weight: 600; font-size: 13.5px; border: none; background: none; width: 100%; text-align: left; margin-bottom: 4px; cursor: pointer; transition: var(--transition); }
+        .navitem:hover { background: rgba(255,255,255,.12); color: #fff; }
+        .navitem.active { background: rgba(255,255,255,.22); color: #fff; font-weight: 700; }
+        .badge { margin-left: auto; background: var(--coral); font-size: 10px; padding: 2px 7px; border-radius: 999px; font-family: 'Space Mono', monospace; font-weight: 700; }
+        
+        .dashboard-main-wrapper { overflow-y: auto; }
+        .dashboard-topbar { background: #fff; border-bottom: 1px solid var(--line); padding: 14px 28px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 10; }
+        .exit-site-btn { background: var(--coral); color: #fff; border: none; border-radius: 999px; padding: 9px 18px; font-weight: 700; font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: var(--transition); }
+        .exit-site-btn:hover { background: #c9432c; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(226,84,60,0.3); }
+        
+        .dashboard-content { padding: 28px; max-width: 1150px; }
+        .dashboard-panel { display: none; }
+        .dashboard-panel.active { display: block; animation: fadeIn .3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 16px; margin-bottom: 24px; }
+        .stat { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 18px; box-shadow: 0 4px 14px rgba(0,0,0,0.03); }
+        .stat .label { font-size: 11px; color: var(--muted); font-weight: 700; font-family: 'Space Mono', monospace; text-transform: uppercase; }
+        .stat .num { font-size: 26px; font-weight: 700; color: var(--forest); font-family: 'Space Mono', monospace; margin-top: 4px; }
+        .box { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 20px; margin-bottom: 18px; position: relative; box-shadow: 0 4px 14px rgba(0,0,0,0.03); }
+        
+        .pill { padding: 4px 10px; border-radius: 999px; font-size: 10.5px; font-weight: 700; font-family: 'Space Mono', monospace; display: inline-block; }
+        .pill.pending { background: #fdeecb; color: #a8730f; }
+        .pill.approved { background: #dcf3e6; color: #1a8a5f; }
+        .pill.rejected { background: #fbdedb; color: var(--coral); }
+        .rowbtn { background: #fff; border: 1px solid var(--line); border-radius: 6px; padding: 6px 12px; font-size: 12px; margin-right: 6px; cursor: pointer; transition: var(--transition); font-weight: 600; }
+        .rowbtn:hover { border-color: var(--forest); background: var(--forest-pale); }
+
+        .msg-wrap { display: grid; grid-template-columns: 250px 1fr; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; background: #fff; height: 500px; box-shadow: 0 6px 20px rgba(0,0,0,0.05); }
+        .thread-list { border-right: 1px solid var(--line); overflow-y: auto; background: var(--paper); }
+        .thread { padding: 14px 16px; border-bottom: 1px solid var(--line); cursor: pointer; transition: var(--transition); }
+        .thread:hover, .thread.active { background: var(--forest-pale); }
+        .conv { display: flex; flex-direction: column; height: 100%; }
+        .conv-head { padding: 14px 18px; border-bottom: 1px solid var(--line); font-weight: 700; background: #fff; color: var(--forest); }
+        .conv-body { flex: 1; padding: 18px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; background: #faf8f2; }
+        .bubble { max-width: 80%; padding: 11px 15px; border-radius: 14px; font-size: 13.5px; line-height: 1.5; }
+        .bubble.in { background: #fff; border: 1px solid var(--line); align-self: flex-start; color: var(--ink); }
+        .bubble.out { background: var(--forest); color: #fff; align-self: flex-end; }
+        .conv-input { display: flex; gap: 10px; padding: 14px; border-top: 1px solid var(--line); background: #fff; }
+        .conv-input input { flex: 1; }
+
+        .modal-bg { display: none; position: fixed; inset: 0; background: rgba(15,61,46,.9); z-index: 500; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
+        .modal-bg.open { display: flex; }
+        .modal-box { background: #fff; border-radius: 18px; padding: 32px; width: 92%; max-width: 500px; border: 1px solid var(--line); box-shadow: 0 20px 40px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; }
+        .role-tabs { display: flex; gap: 6px; margin-bottom: 18px; flex-wrap: wrap; background: var(--paper); padding: 4px; border-radius: 999px; }
+        .role-tab { flex: 1; text-align: center; padding: 8px 12px; border-radius: 999px; cursor: pointer; font-size: 12px; font-weight: 700; color: var(--muted); transition: var(--transition); }
+        .role-tab.active { background: var(--forest); color: #fff; }
+        
+        .toast { position: fixed; bottom: 24px; right: 24px; background: var(--forest); color: #fff; padding: 13px 24px; border-radius: 12px; font-size: 13.5px; font-weight: 600; z-index: 1000; transform: translateY(120%); transition: transform .3s ease; box-shadow: 0 10px 25px rgba(0,0,0,0.25); }
+        .toast.show { transform: translateY(0); }
+
+        .gallery-filter-tabs { display: flex; gap: 8px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 4px; }
+        .filter-btn { padding: 7px 16px; border-radius: 999px; border: 1px solid var(--line); background: #fff; font-size: 12.5px; font-weight: 700; cursor: pointer; transition: var(--transition); white-space: nowrap; }
+        .filter-btn.active, .filter-btn:hover { background: var(--forest); color: #fff; border-color: var(--forest); }
+
+        /* Language selector */
+        .lang-selector { display: flex; align-items: center; gap: 6px; }
+        .lang-selector select { padding: 6px 10px; border-radius: 8px; border: 1px solid var(--line); background: #fff; font-size: 13px; }
+
+        @media (max-width: 900px) {
+            .hamburger { display: block; }
+            .nav-links { display: none; }
+            .reg-card { grid-template-columns: 1fr; }
+            .dashboard-layout { grid-template-columns: 1fr; }
+            .dashboard-sidebar { position: fixed; left: -270px; top: 0; bottom: 0; width: 270px; z-index: 300; transition: left .3s; }
+            .dashboard-sidebar.open { left: 0; }
+            .msg-wrap { grid-template-columns: 1fr; }
+            .lang-selector { margin-left: auto; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- SPLASH SCREEN -->
+<div id="splash" onclick="dismissSplash()">
+    <div class="logo">🏫</div>
+    <h1 id="splash-title">Kersa Secondary School</h1>
+    <div class="welcome" id="splash-welcome">
+        WELCOME TO KERSA SECONDARY SCHOOL WEBSITE!<br>
+        <span style="color:var(--gold); font-size:0.95em;">BAGA NAGAAN GARA WEBSAAYITII MANA BARUMSA QARSAA SADARKAA LAMAFFAATTI NAGAYAAN DHUFTAN!</span>
+    </div>
+    <div class="built"><i class="fa-solid fa-code"></i> <span id="splash-built">Built by Murad Desiye</span></div>
+    <div class="skip-hint" id="splash-hint">Click anywhere or press any key to enter portal →</div>
+</div>
+
+<!-- MAGICAL FLOATING ANIMATION -->
+<div class="magical-float-container" id="magicalFloat"></div>
+
+<!-- PUBLIC VIEW -->
+<div class="public-view" id="publicView" style="position: relative; z-index: 1;">
+
+    <header class="site">
+        <nav>
+            <a href="#home" class="brand">
+                <div class="brand-mark">K</div>
+                <div>
+                    <div class="brand-name">Kersa Secondary School</div>
+                    <div class="brand-sub">KERSA TOWN · MUNESA WOREDA · EAST-ARSI ZONE · OROMIA</div>
+                </div>
+            </a>
+            <button class="hamburger" onclick="openSidebar()">☰</button>
+            <div class="nav-links" id="navLinks">
+                <a href="#home"><i class="fa-solid fa-house"></i> <span data-i18n="home">Home</span></a>
+                <a href="#achievements"><i class="fa-solid fa-trophy"></i> <span data-i18n="achievements">Achievements</span></a>
+                <a href="#gallery"><i class="fa-solid fa-images"></i> <span data-i18n="gallery">Gallery</span></a>
+                <a href="#announcements"><i class="fa-solid fa-bullhorn"></i> <span data-i18n="announcements">Announcements</span></a>
+                <a href="#resources"><i class="fa-solid fa-book"></i> <span data-i18n="resources">Resources</span></a>
+                <a href="#story"><i class="fa-solid fa-book-open"></i> <span data-i18n="story">School Story</span></a>
+                <a href="#registration"><i class="fa-solid fa-pen-to-square"></i> <span data-i18n="register">Register</span></a>
+                <a href="#about"><i class="fa-solid fa-circle-info"></i> <span data-i18n="about">About</span></a>
+                <a href="#" onclick="openMessageCenter()"><i class="fa-solid fa-comments"></i> <span data-i18n="msgcenter">Message Center</span></a>
+                <a href="#" onclick="openPrivacy()"><i class="fa-solid fa-shield"></i> <span data-i18n="privacy">Privacy</span></a>
+                <a href="#" onclick="openTerms()"><i class="fa-solid fa-file-contract"></i> <span data-i18n="terms">Terms</span></a>
+                <button class="btn btn-primary btn-sm" onclick="openLogin()"><i class="fa-solid fa-lock"></i> <span data-i18n="portal">Portal Login</span></button>
+            </div>
+            <div class="lang-selector">
+                <select id="langSelect" onchange="setLanguage(this.value)">
+                    <option value="en">English</option>
+                    <option value="am">አማርኛ</option>
+                    <option value="om">Afaan Oromoo</option>
+                </select>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Sidebar -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+    <div class="sidebar" id="sidebar">
+        <button class="close-btn" onclick="closeSidebar()">✕</button>
+        <a href="#home" onclick="closeSidebar()"><i class="fa-solid fa-house"></i> <span data-i18n="home">Home</span></a>
+        <a href="#achievements" onclick="closeSidebar()"><i class="fa-solid fa-trophy"></i> <span data-i18n="achievements">Achievements</span></a>
+        <a href="#gallery" onclick="closeSidebar()"><i class="fa-solid fa-images"></i> <span data-i18n="gallery">Gallery</span></a>
+        <a href="#announcements" onclick="closeSidebar()"><i class="fa-solid fa-bullhorn"></i> <span data-i18n="announcements">Announcements</span></a>
+        <a href="#resources" onclick="closeSidebar()"><i class="fa-solid fa-book"></i> <span data-i18n="resources">Resources</span></a>
+        <a href="#story" onclick="closeSidebar()"><i class="fa-solid fa-book-open"></i> <span data-i18n="story">School Story</span></a>
+        <a href="#registration" onclick="closeSidebar()"><i class="fa-solid fa-pen-to-square"></i> <span data-i18n="register">Register</span></a>
+        <a href="#about" onclick="closeSidebar()"><i class="fa-solid fa-circle-info"></i> <span data-i18n="about">About</span></a>
+        <a href="#" onclick="closeSidebar(); openMessageCenter();"><i class="fa-solid fa-comments"></i> <span data-i18n="msgcenter">Message Center</span></a>
+        <a href="#" onclick="closeSidebar(); openPrivacy();"><i class="fa-solid fa-shield"></i> <span data-i18n="privacy">Privacy</span></a>
+        <a href="#" onclick="closeSidebar(); openTerms();"><i class="fa-solid fa-file-contract"></i> <span data-i18n="terms">Terms</span></a>
+        <button class="btn btn-primary" style="margin-top:12px; width:100%; justify-content:center;" onclick="closeSidebar(); openLogin();"><i class="fa-solid fa-lock"></i> <span data-i18n="portal">Portal Login</span></button>
+    </div>
+
+    <!-- HOME HERO -->
+    <section id="home">
+        <div class="wrap">
+            <p style="font-size:11px; text-transform:uppercase; letter-spacing:.1em; color:var(--forest); opacity:.8; font-family:'Space Mono',monospace;" data-i18n="location">Kersa town, Munesa Woreda, East-Arsi Zone, Oromia, Ethiopia</p>
+            <h1 style="font-size:clamp(28px,4.5vw,48px); margin:10px 0 14px 0; line-height:1.1;"><span data-i18n="hero1">Where every</span> <span style="color:var(--coral);" data-i18n="hero2">roll call</span> <span data-i18n="hero3">marks a step forward.</span></h1>
+            <p style="font-size:15.5px; max-width:650px; color:#4a463d; margin-bottom:20px;" data-i18n="hero-desc">Kersa Secondary School's digital campus — announcements, resources, exam prep, and direct lines between students, teachers, and parents.</p>
+            
+            <div class="learning-animation">
+                <div class="subject-icon" title="Mathematics" onclick="showSubjectInfo('math')">📐</div>
+                <div class="subject-icon" title="Physics" onclick="showSubjectInfo('physics')">⚡</div>
+                <div class="subject-icon" title="Chemistry" onclick="showSubjectInfo('chemistry')">🧪</div>
+                <div class="subject-icon" title="Biology" onclick="showSubjectInfo('biology')">🧬</div>
+                <div class="subject-icon" title="English" onclick="showSubjectInfo('english')">📖</div>
+                <div class="subject-icon" title="Technology" onclick="showSubjectInfo('tech')">💻</div>
+            </div>
+            
+            <div style="display:flex; gap:12px; flex-wrap:wrap;">
+                <a href="#registration" class="btn btn-primary"><i class="fa-solid fa-clipboard-list"></i> <span data-i18n="start-reg">Start Registration</span></a>
+                <button class="btn btn-ghost" onclick="openLogin()"><i class="fa-solid fa-robot"></i> <span data-i18n="ask-ai">Ask Kersa AI Tutor</span></button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ACHIEVEMENTS -->
+    <section id="achievements" style="background:var(--forest-pale);">
+        <div class="wrap">
+            <div class="section-head">
+                <div>
+                    <span class="tag event"><i class="fa-solid fa-award"></i> <span data-i18n="excellence">Excellence</span></span>
+                    <h2>🏆 <span data-i18n="ach-title">Achievements & Honors</span></h2>
+                </div>
+            </div>
+            <div class="grid3" id="publicAchievements"></div>
+        </div>
+    </section>
+
+    <!-- GALLERY -->
+    <section id="gallery">
+        <div class="wrap">
+            <div class="section-head">
+                <div>
+                    <span class="tag notice"><i class="fa-solid fa-camera"></i> <span data-i18n="campus-life">Campus Life</span></span>
+                    <h2>📸 <span data-i18n="gallery-title">Photo Gallery</span></h2>
+                </div>
+            </div>
+
+            <div class="gallery-filter-tabs">
+                <button class="filter-btn active" onclick="filterGallery('all', this)"><span data-i18n="all-photos">All Photos</span></button>
+                <button class="filter-btn" onclick="filterGallery('students', this)">🎓 <span data-i18n="students">High-Scoring Students</span></button>
+                <button class="filter-btn" onclick="filterGallery('teachers', this)">👨‍🏫 <span data-i18n="teachers">Effective Teachers</span></button>
+                <button class="filter-btn" onclick="filterGallery('compound', this)">🏫 <span data-i18n="compound">School Compound</span></button>
+                <button class="filter-btn" onclick="filterGallery('exam', this)">📝 <span data-i18n="exam-photos">Exam-Taking Students</span></button>
+            </div>
+
+            <div class="grid3" id="publicGallery"></div>
+        </div>
+    </section>
+
+    <!-- ANNOUNCEMENTS -->
+    <section id="announcements" style="background:var(--forest-pale);">
+        <div class="wrap">
+            <div class="section-head">
+                <div>
+                    <span class="tag exam"><i class="fa-solid fa-bullhorn"></i> <span data-i18n="bulletins">Bulletins</span></span>
+                    <h2>📣 <span data-i18n="ann-title">School Announcements</span></h2>
+                </div>
+            </div>
+            <div class="grid3" id="publicAnnouncements"></div>
+        </div>
+    </section>
+
+    <!-- RESOURCES -->
+    <section id="resources">
+        <div class="wrap">
+            <div class="section-head">
+                <div>
+                    <span class="tag notice"><i class="fa-solid fa-folder-open"></i> <span data-i18n="materials">Materials</span></span>
+                    <h2>📚 <span data-i18n="res-title">Resource Library (Short Notes & Exams)</span></h2>
+                </div>
+            </div>
+            <div class="grid3" id="publicResources"></div>
+        </div>
+    </section>
+
+    <!-- SCHOOL STORY -->
+    <section id="story" style="background:var(--forest-pale);">
+        <div class="wrap">
+            <div class="section-head">
+                <div>
+                    <span class="tag event"><i class="fa-solid fa-book-open"></i> <span data-i18n="history">History & Pride</span></span>
+                    <h2>📖 <span data-i18n="story-title">Official School Story</span></h2>
+                </div>
+            </div>
+            <div id="publicStory"></div>
+        </div>
+    </section>
+
+    <!-- REGISTRATION -->
+    <section id="registration">
+        <div class="wrap">
+            <div class="section-head">
+                <div>
+                    <span class="tag exam"><i class="fa-solid fa-id-card"></i> <span data-i18n="admissions">Admissions</span></span>
+                    <h2>📋 <span data-i18n="reg-title">Online Student Registration</span></h2>
+                </div>
+            </div>
+            <form class="reg-card" id="regForm" onsubmit="submitRegistration(event)">
+                <div class="field"><label><span data-i18n="student-name">Student Full Name *</span></label><input type="text" id="regName" required placeholder="e.g. Caalaa Bekele"></div>
+                <div class="field"><label><span data-i18n="grade">Grade Applying For *</span></label><select id="regGrade"><option>Grade 9</option><option>Grade 10</option><option>Grade 11</option><option>Grade 12</option></select></div>
+                <div class="field"><label><span data-i18n="parent-name">Parent / Guardian Name *</span></label><input type="text" id="regParent" required placeholder="e.g. Fatuma Ahmed"></div>
+                <div class="field"><label><span data-i18n="parent-phone">Parent Phone Number *</span></label><input type="tel" id="regPhone" required placeholder="0907123450"></div>
+                <div class="field" style="grid-column:1/-1;"><label><span data-i18n="prev-school">Previous School (Optional)</span></label><input type="text" id="regPrevSchool" placeholder="e.g. Kersa Primary School"></div>
+                <button type="submit" class="btn btn-primary" style="grid-column:1/-1; justify-content:center; padding:12px;"><i class="fa-solid fa-paper-plane"></i> <span data-i18n="submit-app">Submit Application →</span></button>
+            </form>
+        </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" style="background:var(--forest-pale);">
+        <div class="wrap">
+            <div class="section-head">
+                <div>
+                    <span class="tag notice"><i class="fa-solid fa-circle-info"></i> <span data-i18n="about-tag">About</span></span>
+                    <h2><span data-i18n="about-title">About Kersa Secondary School</span></h2>
+                </div>
+            </div>
+            <p style="max-width:750px; font-size:15.5px; line-height:1.7;" data-i18n="about-text">
+                Kersa Secondary School serves students across the Munesa Woreda (East-Arsi Zone, Oromia), preparing them for the national ESSLCE examination and for life beyond it — academically, ethically, and socially.
+            </p>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="wrap">
+            <div class="foot-grid">
+                <div>
+                    <h5 style="color:var(--gold);"><span data-i18n="school-name">Kersa Secondary School</span></h5>
+                    <p style="margin-top:6px;"><span data-i18n="school-address">Kersa town, Munesa Woreda, East-Arsi Zone, Oromia, Ethiopia</span></p>
+                </div>
+                <div>
+                    <h5><span data-i18n="quick-links">Quick Links</span></h5>
+                    <a href="#home"><span data-i18n="home">Home</span></a>
+                    <a href="#achievements"><span data-i18n="achievements">Achievements</span></a>
+                    <a href="#gallery"><span data-i18n="gallery">Gallery</span></a>
+                    <a href="#announcements"><span data-i18n="announcements">Announcements</span></a>
+                </div>
+                <div>
+                    <h5><span data-i18n="contact-admin">Contact Administration</span></h5>
+                    <p>Email: info@kersaschool.et</p>
+                    <p><span data-i18n="phone">Phone</span>: <span id="footer-phone">+251 907 123 450</span></p>
+                </div>
+            </div>
+            <div class="foot-bottom" id="footerSecret" title="Click 3 times for Admin Portal Shortcut">
+                © <span id="footer-year">2026</span> Kersa Secondary School — Designed & Built by Murad Desiye
+            </div>
+        </div>
+    </footer>
+</div>
+
+<!-- ADMIN DASHBOARD -->
+<div class="dashboard-view" id="adminDashboard">
+    <div class="dashboard-layout">
+        <div class="dashboard-sidebar">
+            <div>
+                <div style="display:flex; align-items:center; gap:10px; margin-bottom:20px;">
+                    <div class="brand-mark">K</div>
+                    <div>
+                        <div style="color:#fff; font-weight:800; font-size:15px;">Kersa Director</div>
+                        <div style="color:var(--gold); font-size:10px; font-family:'Space Mono',monospace;">EXECUTIVE CONTROL</div>
+                    </div>
+                </div>
+                <div class="dashboard-nav">
+                    <button class="navitem active" data-panel="overview" onclick="switchAdminPanel('overview')"><i class="fa-solid fa-chart-pie"></i> Overview & Stats</button>
+                    <button class="navitem" data-panel="registrations" onclick="switchAdminPanel('registrations')"><i class="fa-solid fa-id-card"></i> Student Applications <span class="badge" id="regBadge">0</span></button>
+                    <button class="navitem" data-panel="users" onclick="switchAdminPanel('users')"><i class="fa-solid fa-users"></i> Registered Users</button>
+                    <button class="navitem" data-panel="announcements" onclick="switchAdminPanel('announcements')"><i class="fa-solid fa-bullhorn"></i> Announcements</button>
+                    <button class="navitem" data-panel="resources" onclick="switchAdminPanel('resources')"><i class="fa-solid fa-folder-open"></i> Notes & Exams</button>
+                    <button class="navitem" data-panel="gallery" onclick="switchAdminPanel('gallery')"><i class="fa-solid fa-images"></i> Photo Gallery</button>
+                    <button class="navitem" data-panel="story" onclick="switchAdminPanel('story')"><i class="fa-solid fa-book-open"></i> School Story Editor</button>
+                    <button class="navitem" data-panel="achievements" onclick="switchAdminPanel('achievements')"><i class="fa-solid fa-trophy"></i> Achievements</button>
+                    <button class="navitem" data-panel="meetings" onclick="switchAdminPanel('meetings')"><i class="fa-solid fa-video"></i> Virtual Classes</button>
+                    <button class="navitem" data-panel="reviews" onclick="switchAdminPanel('reviews')"><i class="fa-solid fa-star"></i> Reviews & Feedback</button>
+                    <button class="navitem" data-panel="logs" onclick="switchAdminPanel('logs')"><i class="fa-solid fa-shield-halved"></i> Active User Logs</button>
+                    <button class="navitem" data-panel="settings" onclick="switchAdminPanel('settings')"><i class="fa-solid fa-cog"></i> Website Settings</button>
+                </div>
+            </div>
+            <button class="exit-site-btn" onclick="logoutDashboard()" style="width:100%; justify-content:center; margin-top:20px;">
+                <i class="fa-solid fa-arrow-left"></i> Exit to Main Website
+            </button>
+        </div>
+
+        <div class="dashboard-main-wrapper">
+            <div class="dashboard-topbar">
+                <div style="display:flex; align-items:center; gap:10px;">
+                    <b>Director Control Panel</b>
+                    <span class="pill approved"><i class="fa-solid fa-circle" style="font-size:8px;"></i> Live Connected</span>
+                </div>
+                <div>
+                    <button class="btn btn-ghost btn-sm" style="margin-right:8px;" onclick="switchAdminPanel('overview')"><i class="fa-solid fa-arrow-left"></i> Back to Dashboard</button>
+                    <button class="exit-site-btn" onclick="logoutDashboard()"><i class="fa-solid fa-arrow-left"></i> Back to Main Website</button>
+                </div>
+            </div>
+
+            <div class="dashboard-content">
+                <!-- Overview Panel -->
+                <div class="dashboard-panel active" id="panel-overview">
+                    <h2 style="margin-bottom:14px;">Director Overview</h2>
+                    <div class="stats">
+                        <div class="stat"><div class="label">Pending Applications</div><div class="num" id="dashPendingCount">0</div></div>
+                        <div class="stat"><div class="label">Announcements</div><div class="num" id="dashAnnouncements">0</div></div>
+                        <div class="stat"><div class="label">Study Resources</div><div class="num" id="dashResources">0</div></div>
+                        <div class="stat"><div class="label">Gallery Photos</div><div class="num" id="dashImages">0</div></div>
+                        <div class="stat"><div class="label">Registered Users</div><div class="num" id="dashUsers">0</div></div>
+                        <div class="stat"><div class="label">Reviews</div><div class="num" id="dashReviews">0</div></div>
+                    </div>
+                    <div class="box">
+                        <b>Quick Executive Actions:</b>
+                        <div style="display:flex; gap:10px; margin-top:12px; flex-wrap:wrap;">
+                            <button class="btn btn-primary btn-sm" onclick="switchAdminPanel('registrations')"><i class="fa-solid fa-users"></i> Review Student Applications</button>
+                            <button class="btn btn-ghost btn-sm" onclick="switchAdminPanel('users')"><i class="fa-solid fa-id-badge"></i> View Registered Users</button>
+                            <button class="btn btn-ghost btn-sm" onclick="switchAdminPanel('announcements')"><i class="fa-solid fa-plus"></i> Post Announcement</button>
+                            <button class="btn btn-ghost btn-sm" onclick="switchAdminPanel('gallery')"><i class="fa-solid fa-camera"></i> Upload Photo</button>
+                            <button class="btn btn-ghost btn-sm" onclick="switchAdminPanel('story')"><i class="fa-solid fa-pen"></i> Edit School Story</button>
+                            <button class="btn btn-ghost btn-sm" onclick="switchAdminPanel('reviews')"><i class="fa-solid fa-star"></i> View Reviews</button>
+                            <button class="btn btn-ghost btn-sm" onclick="switchAdminPanel('settings')"><i class="fa-solid fa-cog"></i> Website Settings</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Student Applications -->
+                <div class="dashboard-panel" id="panel-registrations">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+                        <h2>Student Registration Applications</h2>
+                        <span class="pill pending" id="pendingAppsBadge">0 Pending Review</span>
+                    </div>
+                    <div id="adminRegList"></div>
+                </div>
+
+                <!-- Registered Users Panel -->
+                <div class="dashboard-panel" id="panel-users">
+                    <h2>Registered Users Overview</h2>
+                    <div id="adminUsersList"></div>
+                </div>
+
+                <!-- Announcements Panel -->
+                <div class="dashboard-panel" id="panel-announcements">
+                    <h2>Campus Announcements Manager</h2>
+                    <div class="box">
+                        <h3>Publish Live Announcement</h3>
+                        <div class="field" style="margin-top:10px;"><label>Title *</label><input id="adminAnnTitle" placeholder="e.g. Grade 12 ESSLCE Mock Schedule"></div>
+                        <div class="field"><label>Message Details *</label><textarea id="adminAnnBody" rows="3" placeholder="Full announcement content..."></textarea></div>
+                        <div class="field"><label>Audience</label><select id="adminAnnAudience"><option value="all">Everyone</option><option value="students">Students Only</option><option value="teachers">Teachers Only</option></select></div>
+                        <button class="btn btn-primary" onclick="publishAnnouncement()"><i class="fa-solid fa-paper-plane"></i> Publish</button>
+                    </div>
+                    <div id="adminAnnList"></div>
+                </div>
+
+                <!-- Resources Panel -->
+                <div class="dashboard-panel" id="panel-resources">
+                    <h2>Study Materials Manager</h2>
+                    <div class="box">
+                        <h3>Upload Study Material</h3>
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:10px;">
+                            <div class="field"><label>Resource Title *</label><input id="adminResTitle" placeholder="e.g. Physics Note"></div>
+                            <div class="field"><label>Material Type</label><select id="adminResType"><option value="note">🗒️ Short Note</option><option value="exam">📝 Past Exam</option><option value="worksheet">📄 Worksheet</option><option value="book">📖 Textbook</option></select></div>
+                            <div class="field"><label>Subject *</label><input id="adminResSubject" placeholder="Physics, Chemistry..."></div>
+                            <div class="field"><label>Grade Level</label><select id="adminResGrade"><option>Grade 9</option><option>Grade 10</option><option>Grade 11</option><option>Grade 12</option></select></div>
+                        </div>
+                        <button class="btn btn-primary" style="margin-top:8px;" onclick="addResource()"><i class="fa-solid fa-cloud-arrow-up"></i> Upload</button>
+                    </div>
+                    <div id="adminResList"></div>
+                </div>
+
+                <!-- Gallery Panel with Multiple File Upload -->
+                <div class="dashboard-panel" id="panel-gallery">
+                    <h2>Photo Gallery Manager</h2>
+                    <div class="box">
+                        <h3>Upload Photos from Your Device (Multiple Supported)</h3>
+                        <div class="field" style="margin-top:10px;"><label>Photo Headline *</label><input id="adminImgTitle" placeholder="e.g. Award Ceremony"></div>
+                        <div class="field"><label>Gallery Category *</label><select id="adminImgCat"><option value="students">🎓 High-Scoring Students</option><option value="teachers">👨‍🏫 Effective Teachers</option><option value="compound">🏫 School Compound</option><option value="exam">📝 Exam-Taking Students</option></select></div>
+                        <div class="field"><label>Upload Image Files (select multiple)</label><input type="file" id="adminImgFile" accept="image/*" multiple onchange="previewImages(this)"></div>
+                        <div id="imagePreviewContainer" style="margin-top:10px; display:flex; flex-wrap:wrap; gap:10px;"></div>
+                        <button class="btn btn-primary" onclick="addImages()"><i class="fa-solid fa-camera"></i> Post Photos</button>
+                    </div>
+                    <div id="adminImgList"></div>
+                </div>
+
+                <!-- Story Panel -->
+                <div class="dashboard-panel" id="panel-story">
+                    <h2>School Story Editor</h2>
+                    <div class="box">
+                        <h3>Publish Story</h3>
+                        <div class="field" style="margin-top:10px;"><label>Story Headline *</label><input id="adminStoryTitle" value="Mr. B Scored the Highest Mark!"></div>
+                        <div class="field"><label>Full Story *</label><textarea id="adminStoryBody" rows="5">We are proud to announce that Mr. B achieved the top score!</textarea></div>
+                        <button class="btn btn-primary" onclick="saveStory()"><i class="fa-solid fa-floppy-disk"></i> Publish</button>
+                    </div>
+                    <div id="adminStoryList"></div>
+                </div>
+
+                <!-- Achievements Panel -->
+                <div class="dashboard-panel" id="panel-achievements">
+                    <h2>Achievements Manager</h2>
+                    <div class="box">
+                        <h3>Post Achievement</h3>
+                        <div class="field" style="margin-top:10px;"><label>Achievement Title *</label><input id="adminAchTitle" placeholder="e.g. #1 Ranked School"></div>
+                        <div class="field"><label>Details *</label><textarea id="adminAchBody" rows="3" placeholder="Details..."></textarea></div>
+                        <button class="btn btn-primary" onclick="addAchievement()"><i class="fa-solid fa-award"></i> Post</button>
+                    </div>
+                    <div id="adminAchList"></div>
+                </div>
+
+                <!-- Virtual Classroom Panel -->
+                <div class="dashboard-panel" id="panel-meetings">
+                    <h2>Virtual Classroom</h2>
+                    <div class="box"><button class="btn btn-primary" onclick="createMeeting()"><i class="fa-solid fa-video"></i> Schedule Virtual Class</button></div>
+                    <div id="adminMeetingList"></div>
+                </div>
+
+                <!-- Reviews Panel -->
+                <div class="dashboard-panel" id="panel-reviews">
+                    <h2>Reviews & Feedback</h2>
+                    <div class="box">
+                        <h3>Submit Review</h3>
+                        <div class="field" style="margin-top:10px;"><label>Reviewer Name *</label><input id="reviewName" placeholder="Your Name"></div>
+                        <div class="field"><label>Rating *</label><select id="reviewRating"><option>5 - Excellent</option><option>4 - Very Good</option><option>3 - Good</option><option>2 - Fair</option><option>1 - Poor</option></select></div>
+                        <div class="field"><label>Review *</label><textarea id="reviewText" rows="3" placeholder="Your feedback..."></textarea></div>
+                        <button class="btn btn-primary" onclick="submitReview()"><i class="fa-solid fa-star"></i> Submit</button>
+                    </div>
+                    <div id="adminReviewList"></div>
+                </div>
+
+                <!-- Logs Panel -->
+                <div class="dashboard-panel" id="panel-logs">
+                    <h2>🔒 Activity Monitoring</h2>
+                    <div class="box">
+                        <div id="adminLogBox" style="font-family:'Space Mono',monospace; font-size:12px; background:#0b1320; color:#38bdf8; padding:16px; border-radius:10px; height:240px; overflow-y:auto; line-height:1.8;">
+                            [SYSTEM LOG] Portal Connected<br>[SYSTEM LOG] Admin Logged In.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Website Settings Panel -->
+                <div class="dashboard-panel" id="panel-settings">
+                    <h2>⚙️ Website Settings</h2>
+                    <div class="box">
+                        <h3>Update System Information</h3>
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:10px;">
+                            <div class="field">
+                                <label>Contact Phone Number</label>
+                                <input type="text" id="settingsPhone" placeholder="+251 907 123 450">
+                            </div>
+                            <div class="field">
+                                <label>Copyright Year</label>
+                                <input type="text" id="settingsYear" placeholder="2026">
+                            </div>
+                        </div>
+                        <p style="font-size:12px; color:var(--muted); margin-top:10px;">
+                            Developer: <strong>Murad Desiye</strong> (fixed)
+                        </p>
+                        <button class="btn btn-primary" onclick="updateSystemSettings()">
+                            <i class="fa-solid fa-sync"></i> Update System
+                        </button>
+                    </div>
+                </div>
+
+                <!-- AI API Settings Panel -->
+                <div class="dashboard-panel" id="panel-ai-api">
+                    <h2>🤖 AI API Configuration</h2>
+                    <div class="box">
+                        <h3>Connect External AI Service</h3>
+                        <div class="field" style="margin-top:10px;">
+                            <label>API Endpoint URL</label>
+                            <input type="text" id="aiApiEndpoint" placeholder="https://api.openai.com/v1/chat/completions">
+                        </div>
+                        <div class="field">
+                            <label>API Key</label>
+                            <input type="password" id="aiApiKey" placeholder="sk-...">
+                        </div>
+                        <div class="field">
+                            <label>Model</label>
+                            <select id="aiModel">
+                                <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
+                                <option value="gpt-4">GPT-4</option>
+                                <option value="custom">Custom</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary" onclick="saveAISettings()"><i class="fa-solid fa-save"></i> Save AI Settings</button>
+                        <p style="font-size:11px; color:var(--muted); margin-top:8px;">API key is stored locally in your browser only.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- STUDENT / TEACHER PORTAL HUB -->
+<div class="dashboard-view" id="portalDashboard">
+    <div class="dashboard-layout">
+        <div class="dashboard-sidebar">
+            <div>
+                <div style="display:flex; align-items:center; gap:10px; margin-bottom:20px;">
+                    <div class="brand-mark">K</div>
+                    <div>
+                        <div style="color:#fff; font-weight:800; font-size:15px;" id="portalRoleTitle">Student Portal</div>
+                        <div style="color:var(--gold); font-size:10px; font-family:'Space Mono',monospace;">CONNECTED HUB</div>
+                    </div>
+                </div>
+                <div class="dashboard-nav">
+                    <button class="navitem active" data-portal-panel="chat" onclick="switchPortalPanel('chat')"><i class="fa-solid fa-comments"></i> Message Center</button>
+                    <button class="navitem" data-portal-panel="ai" onclick="switchPortalPanel('ai')"><i class="fa-solid fa-robot"></i> Kersa AI Tutor</button>
+                    <button class="navitem" data-portal-panel="meet" onclick="switchPortalPanel('meet')"><i class="fa-solid fa-video"></i> Virtual Classroom</button>
+                </div>
+            </div>
+            <button class="exit-site-btn" onclick="logoutDashboard()" style="width:100%; justify-content:center; margin-top:20px;">
+                <i class="fa-solid fa-arrow-left"></i> Exit Portal
+            </button>
+        </div>
+
+        <div class="dashboard-main-wrapper">
+            <div class="dashboard-topbar">
+                <b id="portalHeader">Message Center</b>
+                <button class="exit-site-btn" onclick="logoutDashboard()"><i class="fa-solid fa-arrow-left"></i> Back to Main Website</button>
+            </div>
+
+            <div class="dashboard-content">
+                <!-- Message Center Panel -->
+                <div class="dashboard-panel active" id="portal-panel-chat">
+                    <h2>Student-Teacher Message Center</h2>
+                    <div class="msg-wrap">
+                        <div class="thread-list" id="portalThreadList"></div>
+                        <div class="conv">
+                            <div class="conv-head" id="portalConvHead">Select a conversation</div>
+                            <div class="conv-body" id="portalConvBody"></div>
+                            <div class="conv-input">
+                                <input id="portalMsgInput" placeholder="Type message..." onkeypress="if(event.key==='Enter') sendPortalMsg()">
+                                <button class="btn btn-primary btn-sm" onclick="sendPortalMsg()">Send</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Tutor Panel (with API integration) -->
+                <div class="dashboard-panel" id="portal-panel-ai">
+                    <h2>🤖 Kersa AI Tutor v2.0</h2>
+                    <p style="color:var(--muted); font-size:13.5px; margin-bottom:12px;">
+                        Advanced AI with comprehensive resources. If API is configured, I will use the external service; otherwise, built‑in responses are used.
+                    </p>
+                    <div class="box">
+                        <div id="aiChatBoxPane" style="height:400px; overflow-y:auto; display:flex; flex-direction:column; gap:10px; margin-bottom:12px; padding:10px; background:#faf8f2; border-radius:8px;">
+                            <div class="bubble in">
+                                <strong>🤖 Kersa AI v2.0:</strong><br>
+                                Welcome! Ask me about:<br>
+                                📐 Math | ⚡ Physics | 🧪 Chemistry | 🧬 Biology<br>
+                                Try: "math magic", "physics formula", "chemistry reaction", "biology cell"
+                            </div>
+                        </div>
+                        <div style="display:flex; gap:10px;">
+                            <input id="aiQuestionInputPane" placeholder="Ask anything..." style="flex:1;" onkeypress="if(event.key==='Enter') askKersaAI()">
+                            <button class="btn btn-primary" onclick="askKersaAI()"><i class="fa-solid fa-paper-plane"></i> Ask</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Virtual Classroom Panel -->
+                <div class="dashboard-panel" id="portal-panel-meet">
+                    <h2>🎥 Virtual Classroom</h2>
+                    <div class="box"><button class="btn btn-primary" onclick="createMeeting()"><i class="fa-solid fa-video"></i> Start Class</button></div>
+                    <div id="portalMeetingList"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- LOGIN MODAL - Admin Hidden -->
+<div class="modal-bg" id="loginModal">
+    <div class="modal-box">
+        <h3 style="margin-bottom:12px; color:var(--forest);">Portal Login / Register</h3>
+        <p style="font-size:12.5px; color:var(--muted); margin-bottom:14px;">Enter your credentials. New users will be registered automatically.</p>
+        
+        <div class="role-tabs" id="roleTabs">
+            <div class="role-tab active" onclick="setRole('student', this)">Student</div>
+            <div class="role-tab" onclick="setRole('teacher', this)">Teacher</div>
+            <div class="role-tab" onclick="setRole('admin', this)" id="adminTab" style="display:none; background:#0f172a; color:#fff;">Admin</div>
+        </div>
+        
+        <div id="profileFields" style="display:grid; gap:10px; margin-bottom:14px;">
+            <div class="field"><label>Full Name *</label><input type="text" id="loginFullName" placeholder="Enter your full name"></div>
+            <div class="field"><label>Phone Number *</label><input type="tel" id="loginPhone" placeholder="0907123450"></div>
+            <div class="field"><label>Email Address *</label><input type="email" id="loginEmail" placeholder="you@example.com"></div>
+        </div>
+
+        <div class="field"><label>Username</label><input type="text" id="loginUser" placeholder="Choose username"></div>
+        <div class="field"><label>Password</label><input type="password" id="loginPass" placeholder="Choose password"></div>
+        
+        <button class="btn btn-primary" style="width:100%; justify-content:center; padding:12px;" onclick="portalLogin()">Login / Register →</button>
+        <button class="btn btn-ghost" style="width:100%; margin-top:8px; justify-content:center;" onclick="closeLogin()">Cancel</button>
+    </div>
+</div>
+
+<!-- PRIVACY MODAL -->
+<div class="modal-bg" id="privacyModal">
+    <div class="modal-box">
+        <h3>Privacy Policy</h3>
+        <p>Your privacy is important to us. This website does not collect personal information without your explicit consent. Any data you provide (such as registration details) is stored locally on your device and is not transmitted to external servers unless you configure AI API access, in which case only the questions you ask may be sent to the AI provider.</p>
+        <button class="btn btn-primary" onclick="closeModal('privacyModal')">Close</button>
+    </div>
+</div>
+
+<!-- TERMS MODAL -->
+<div class="modal-bg" id="termsModal">
+    <div class="modal-box">
+        <h3>Terms of Service</h3>
+        <p>By using this website, you agree to use it for educational purposes only. All content is provided by Kersa Secondary School. Unauthorized reproduction or commercial use is prohibited.</p>
+        <button class="btn btn-primary" onclick="closeModal('termsModal')">Close</button>
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+    // ===== MAIN JAVASCRIPT ENGINE =====
+    const memoryStore = {};
+    const DB = {
+        get(key, fallback = []) {
+            try {
+                const data = localStorage.getItem('kersa_' + key);
+                return data ? JSON.parse(data) : (memoryStore[key] || fallback);
+            } catch (e) {
+                return memoryStore[key] || fallback;
+            }
+        },
+        set(key, value) {
+            memoryStore[key] = value;
+            try {
+                localStorage.setItem('kersa_' + key, JSON.stringify(value));
+            } catch (e) {}
+        },
+        // ... (all previous DB methods remain unchanged)
+        getAnnouncements() { return this.get('announcements', [ { id: 1, title: 'Grade 12 ESSLCE Preparation', body: 'Special weekend review sessions begin this Saturday.', audience: 'students', createdAt: 'Aug 16, 2026' } ]); },
+        getResources() { return this.get('resources', [ { id: 1, title: 'Grade 12 Physics Note', type: 'note', subject: 'Physics', grade: '12', createdAt: 'Aug 15, 2026' } ]); },
+        getRegistrations() { return this.get('registrations', []); },
+        getAchievements() { return this.get('achievements', [ { id: 1, title: '🏆 Top Regional ESSLCE Results', body: 'Students ranked #1 in natural sciences.', createdAt: 'Aug 10, 2026', likes: 0, comments: [] } ]); },
+        getGallery() { 
+            return this.get('gallery', [
+                { id: 1, title: 'Grade 12 High-Scoring Students Award', category: 'students', imageUrl: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 250"><rect width="100%" height="100%" fill="%230f3d2e"/><text x="50%" y="45%" fill="%23f2a93b" font-family="sans-serif" font-size="20" font-weight="bold" text-anchor="middle">🎓 High-Scoring Students</text><text x="50%" y="65%" fill="%23ffffff" font-family="sans-serif" font-size="14" text-anchor="middle">Top Academic Performers</text></svg>', createdAt: 'Aug 05, 2026', likes: 12, comments: [{user: 'Ali', text: 'Great job!'}] },
+                { id: 2, title: 'Outstanding Science Faculty Teachers', category: 'teachers', imageUrl: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 250"><rect width="100%" height="100%" fill="%2317573f"/><text x="50%" y="45%" fill="%23ffffff" font-family="sans-serif" font-size="20" font-weight="bold" text-anchor="middle">👨‍🏫 Effective Teachers</text><text x="50%" y="65%" fill="%23f2a93b" font-family="sans-serif" font-size="14" text-anchor="middle">Faculty Excellence</text></svg>', createdAt: 'Aug 06, 2026', likes: 8, comments: [] },
+                { id: 3, title: 'School Campus Main Entrance', category: 'compound', imageUrl: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 250"><rect width="100%" height="100%" fill="%231c1b18"/><text x="50%" y="45%" fill="%23f2a93b" font-family="sans-serif" font-size="20" font-weight="bold" text-anchor="middle">🏫 School Compound</text><text x="50%" y="65%" fill="%23ffffff" font-family="sans-serif" font-size="14" text-anchor="middle">Kersa Main Grounds</text></svg>', createdAt: 'Aug 08, 2026', likes: 5, comments: [] },
+                { id: 4, title: 'Students Taking National Mock Exams', category: 'exam', imageUrl: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 250"><rect width="100%" height="100%" fill="%233c86a6"/><text x="50%" y="45%" fill="%23ffffff" font-family="sans-serif" font-size="20" font-weight="bold" text-anchor="middle">📝 Exam-Taking Students</text><text x="50%" y="65%" fill="%23fbf6ea" font-family="sans-serif" font-size="14" text-anchor="middle">National ESSLCE Prep</text></svg>', createdAt: 'Aug 11, 2026', likes: 20, comments: [{user: 'Sara', text: 'Proud of our students!'}] }
+            ]); 
+        },
+        getStories() { return this.get('stories', [ { id: 1, title: 'Mr. B Scored Highest Mark!', body: 'Historic academic victory for Kersa!', createdAt: 'Aug 16, 2026', likes: 0, comments: [] } ]); },
+        getMessages() { return this.get('messages', []); },
+        getMeetings() { return this.get('meetings', []); },
+        getReviews() { return this.get('reviews', []); },
+        getUsers() { return this.get('users', []); },
+        getSettings() { return this.get('settings', { phone: '+251 907 123 450', copyrightYear: '2026' }); },
+        getAISettings() { return this.get('aiSettings', { endpoint: '', apiKey: '', model: 'gpt-3.5-turbo' }); },
+        getActivityLogs() { return this.get('activityLogs', []); },
+        saveSettings(s) { this.set('settings', s); },
+        saveAISettings(a) { this.set('aiSettings', a); },
+        logActivity(message) { const logs = this.getActivityLogs(); logs.unshift({ time: new Date().toLocaleString(), message }); this.set('activityLogs', logs.slice(0, 100)); },
+        saveAnnouncement(a) { const list = this.getAnnouncements(); a.id = Date.now(); a.createdAt = new Date().toLocaleDateString(); list.unshift(a); this.set('announcements', list); this.logActivity('Announcement published: ' + a.title); },
+        saveResource(r) { const list = this.getResources(); r.id = Date.now(); r.createdAt = new Date().toLocaleDateString(); list.unshift(r); this.set('resources', list); this.logActivity('Resource uploaded: ' + r.title); },
+        saveRegistration(r) { const list = this.getRegistrations(); r.id = Date.now(); r.status = 'pending'; r.submittedAt = new Date().toLocaleDateString(); list.unshift(r); this.set('registrations', list); this.logActivity('New application from ' + r.name); },
+        updateRegistration(id, status) { const list = this.getRegistrations(); const i = list.findIndex(x => x.id === id); if (i > -1) { list[i].status = status; this.set('registrations', list); this.logActivity('Application ' + status + ' for ' + list[i].name); } },
+        updateRegPhone(id, phone) { const list = this.getRegistrations(); const i = list.findIndex(x => x.id === id); if (i > -1) { list[i].phone = phone; this.set('registrations', list); this.logActivity('Phone updated for ' + list[i].name); } },
+        saveAchievement(a) { const list = this.getAchievements(); a.id = Date.now(); a.createdAt = new Date().toLocaleDateString(); a.likes = 0; a.comments = []; list.unshift(a); this.set('achievements', list); this.logActivity('Achievement posted: ' + a.title); },
+        saveGalleryImage(g) { 
+            const list = this.getGallery(); 
+            g.id = Date.now(); 
+            g.createdAt = new Date().toLocaleDateString(); 
+            g.likes = 0; 
+            g.comments = []; 
+            list.unshift(g); 
+            this.set('gallery', list); 
+            this.logActivity('Gallery image added: ' + g.title);
+        },
+        saveStory(s) { const list = this.getStories(); s.id = Date.now(); s.createdAt = new Date().toLocaleDateString(); s.likes = 0; s.comments = []; list.unshift(s); this.set('stories', list); this.logActivity('Story published: ' + s.title); },
+        saveMessage(msg) { const list = this.getMessages(); msg.id = Date.now(); msg.timestamp = new Date().toLocaleTimeString(); list.push(msg); this.set('messages', list); this.logActivity('Message from ' + msg.sender + ' to ' + msg.receiver); },
+        saveMeeting(m) { const list = this.getMeetings(); m.id = Date.now(); list.unshift(m); this.set('meetings', list); this.logActivity('Meeting scheduled: ' + m.title); },
+        deleteMeeting(id) { const list = this.getMeetings(); const m = list.find(x => x.id === id); if (m) { this.set('meetings', list.filter(x => x.id !== id)); this.logActivity('Meeting deleted: ' + m.title); } },
+        saveReview(r) { const list = this.getReviews(); r.id = Date.now(); r.createdAt = new Date().toLocaleDateString(); list.unshift(r); this.set('reviews', list); this.logActivity('Review by ' + r.name); },
+        saveUser(u) { const list = this.getUsers(); const existing = list.find(x => x.username === u.username); if (existing) { Object.assign(existing, u); } else { u.id = Date.now(); list.push(u); } this.set('users', list); this.logActivity('User ' + u.username + ' logged in/registered'); },
+        deleteAnnouncement(id) { this.set('announcements', this.getAnnouncements().filter(a => a.id !== id)); this.logActivity('Announcement deleted'); },
+        deleteResource(id) { this.set('resources', this.getResources().filter(r => r.id !== id)); this.logActivity('Resource deleted'); },
+        deleteAchievement(id) { this.set('achievements', this.getAchievements().filter(a => a.id !== id)); this.logActivity('Achievement deleted'); },
+        deleteGalleryImage(id) { this.set('gallery', this.getGallery().filter(g => g.id !== id)); this.logActivity('Gallery image deleted'); },
+        deleteStory(id) { this.set('stories', this.getStories().filter(s => s.id !== id)); this.logActivity('Story deleted'); },
+        deleteReview(id) { this.set('reviews', this.getReviews().filter(r => r.id !== id)); this.logActivity('Review deleted'); }
+    };
+
+    // ===== LANGUAGE SUPPORT =====
+    const translations = {
+        en: {
+            'home': 'Home',
+            'achievements': 'Achievements',
+            'gallery': 'Gallery',
+            'announcements': 'Announcements',
+            'resources': 'Resources',
+            'story': 'School Story',
+            'register': 'Register',
+            'about': 'About',
+            'msgcenter': 'Message Center',
+            'privacy': 'Privacy',
+            'terms': 'Terms',
+            'portal': 'Portal Login',
+            'location': 'Kersa town, Munesa Woreda, East-Arsi Zone, Oromia, Ethiopia',
+            'hero1': 'Where every',
+            'hero2': 'roll call',
+            'hero3': 'marks a step forward.',
+            'hero-desc': "Kersa Secondary School's digital campus — announcements, resources, exam prep, and direct lines between students, teachers, and parents.",
+            'start-reg': 'Start Registration',
+            'ask-ai': 'Ask Kersa AI Tutor',
+            'excellence': 'Excellence',
+            'ach-title': 'Achievements & Honors',
+            'campus-life': 'Campus Life',
+            'gallery-title': 'Photo Gallery',
+            'all-photos': 'All Photos',
+            'students': 'High-Scoring Students',
+            'teachers': 'Effective Teachers',
+            'compound': 'School Compound',
+            'exam-photos': 'Exam-Taking Students',
+            'bulletins': 'Bulletins',
+            'ann-title': 'School Announcements',
+            'materials': 'Materials',
+            'res-title': 'Resource Library (Short Notes & Exams)',
+            'history': 'History & Pride',
+            'story-title': 'Official School Story',
+            'admissions': 'Admissions',
+            'reg-title': 'Online Student Registration',
+            'student-name': 'Student Full Name *',
+            'grade': 'Grade Applying For *',
+            'parent-name': 'Parent / Guardian Name *',
+            'parent-phone': 'Parent Phone Number *',
+            'prev-school': 'Previous School (Optional)',
+            'submit-app': 'Submit Application →',
+            'about-tag': 'About',
+            'about-title': 'About Kersa Secondary School',
+            'about-text': 'Kersa Secondary School serves students across the Munesa Woreda (East-Arsi Zone, Oromia), preparing them for the national ESSLCE examination and for life beyond it — academically, ethically, and socially.',
+            'school-name': 'Kersa Secondary School',
+            'school-address': 'Kersa town, Munesa Woreda, East-Arsi Zone, Oromia, Ethiopia',
+            'quick-links': 'Quick Links',
+            'contact-admin': 'Contact Administration',
+            'phone': 'Phone'
+        },
+        am: {
+            'home': 'መነሻ',
+            'achievements': 'ስኬቶች',
+            'gallery': 'ማዕከለ-ስዕላት',
+            'announcements': 'ማስታወቂያዎች',
+            'resources': 'መርጃዎች',
+            'story': 'የትምህርት ቤት ታሪክ',
+            'register': 'ይመዝገቡ',
+            'about': 'ስለ እኛ',
+            'msgcenter': 'የመልእክት ማዕከል',
+            'privacy': 'ግላዊነት',
+            'terms': 'ውሎች',
+            'portal': 'መግቢያ',
+            'location': 'ከርሳ ከተማ፣ ሙነሳ ወረዳ፣ ምስራቅ አርሲ ዞን፣ ኦሮሚያ፣ ኢትዮጵያ',
+            'hero1': 'እያንዳንዱ',
+            'hero2': 'ስም መጥራት',
+            'hero3': 'ወደፊት እርምጃ ነው።',
+            'hero-desc': 'የከርሳ ሁለተኛ ደረጃ ትምህርት ቤት ዲጂታል ግቢ — ማስታወቂያዎች፣ መርጃዎች፣ የፈተና ዝግጅት እና በተማሪዎች፣ በመምህራን እና በወላጆች መካከል ቀጥተኛ መስመሮች።',
+            'start-reg': 'ምዝገባ ጀምር',
+            'ask-ai': 'ከርሳ AI ሞግዚትን ጠይቅ',
+            'excellence': 'ልህቀት',
+            'ach-title': 'ስኬቶች እና ክብር',
+            'campus-life': 'የግቢ ህይወት',
+            'gallery-title': 'የፎቶ ማዕከለ-ስዕላት',
+            'all-photos': 'ሁሉም ፎቶዎች',
+            'students': 'ከፍተኛ ውጤት ያላቸው ተማሪዎች',
+            'teachers': 'ውጤታማ መምህራን',
+            'compound': 'የትምህርት ቤት ግቢ',
+            'exam-photos': 'ፈተና የሚወስዱ ተማሪዎች',
+            'bulletins': 'ማስታወቂያዎች',
+            'ann-title': 'የትምህርት ቤት ማስታወቂያዎች',
+            'materials': 'ቁሳቁሶች',
+            'res-title': 'የመርጃ ቤተ-መጻሕፍት (አጫጭር ማስታወሻዎች እና ፈተናዎች)',
+            'history': 'ታሪክ እና ኩራት',
+            'story-title': 'ይፋዊ የትምህርት ቤት ታሪክ',
+            'admissions': 'ምዝገባ',
+            'reg-title': 'የመስመር ላይ የተማሪ ምዝገባ',
+            'student-name': 'የተማሪ ሙሉ ስም *',
+            'grade': 'የሚመዘገብበት ክፍል *',
+            'parent-name': 'የወላጅ / ሞግዚት ስም *',
+            'parent-phone': 'የወላጅ ስልክ ቁጥር *',
+            'prev-school': 'የቀድሞ ትምህርት ቤት (አማራጭ)',
+            'submit-app': 'ማመልከቻ ያስገቡ →',
+            'about-tag': 'ስለ እኛ',
+            'about-title': 'ስለ ከርሳ ሁለተኛ ደረጃ ትምህርት ቤት',
+            'about-text': 'የከርሳ ሁለተኛ ደረጃ ትምህርት ቤት በሙነሳ ወረዳ (ምስራቅ አርሲ ዞን፣ ኦሮሚያ) ያሉ ተማሪዎችን ለብሔራዊ የESSLCE ፈተና እና ከዚያ በላይ ለሕይወት ያዘጋጃል።',
+            'school-name': 'ከርሳ ሁለተኛ ደረጃ ትምህርት ቤት',
+            'school-address': 'ከርሳ ከተማ፣ ሙነሳ ወረዳ፣ ምስራቅ አርሲ ዞን፣ ኦሮሚያ፣ ኢትዮጵያ',
+            'quick-links': 'ፈጣን አገናኞች',
+            'contact-admin': 'አስተዳደሩን ያግኙ',
+            'phone': 'ስልክ'
+        },
+        om: {
+            'home': 'Mana',
+            'achievements': 'Galmaawwan',
+            'gallery': 'Suuraa',
+            'announcements': 'Beeksisoota',
+            'resources': 'Qabeenya',
+            'story': 'Seenaa Mana Barumsaa',
+            'register': 'Galmaa\'i',
+            'about': 'Waa\'ee Keenya',
+            'msgcenter': 'Wiirtuu Ergaa',
+            'privacy': 'Dhuunfaa',
+            'terms': 'Haaloo',
+            'portal': 'Seensaa',
+            'location': 'Magaalaa Qarsaa, Aanaa Muneessa, Godina Arsii Bahaa, Oromiyaa, Itoophiyaa',
+            'hero1': 'Tokkoon tokkoon',
+            'hero2': 'maqaa waamichaa',
+            'hero3': 'tarkaanfii fuulduraati.',
+            'hero-desc': 'Mana barumsaa Qarsaa digitaalaa — beeksisoota, qabeenya, qophii qormaataa fi sarara kallattii gidduu barattoota, barsiisota fi maatii.',
+            'start-reg': 'Galmaa\'uu Jalqabi',
+            'ask-ai': 'Qarsaa AI barsiisaa gaafadhu',
+            'excellence': 'Cimina',
+            'ach-title': 'Galmaawwan & Kabajaa',
+            'campus-life': 'Jireenya Mana Barumsaa',
+            'gallery-title': 'Suuraa',
+            'all-photos': 'Suuraa hunda',
+            'students': 'Barattoota Qabxii Olaanaa',
+            'teachers': 'Barsiisota Bu\'a-qabeessa',
+            'compound': 'Mana Barumsaa',
+            'exam-photos': 'Barattoota Qormaata Fudhatan',
+            'bulletins': 'Beeksisoota',
+            'ann-title': 'Beeksisoota Mana Barumsaa',
+            'materials': 'Meeshaalee',
+            'res-title': 'Mana Kitaabaa (Yaadannoo gabaabaa & Qormaata)',
+            'history': 'Seenaa & Boona',
+            'story-title': 'Seenaa Mana Barumsaa',
+            'admissions': 'Galmaa\'ina',
+            'reg-title': 'Galmaa\'ina Barattootaa Online',
+            'student-name': 'Maqaa Guutuu Barataa *',
+            'grade': 'Kutaa *',
+            'parent-name': 'Maqaa Maatii / Eegduu *',
+            'parent-phone': 'Lakkoofsa Bilbilaa Maatii *',
+            'prev-school': 'Mana Barumsaa Duraa (Yoo jiraate)',
+            'submit-app': 'Galmee Ergii →',
+            'about-tag': 'Waa\'ee Keenya',
+            'about-title': 'Waa\'ee Mana Barumsaa Qarsaa',
+            'about-text': 'Manni barumsaa Qarsaa barattoota Aanaa Muneessa (Godina Arsii Bahaa, Oromiyaa) tajaajila, qormaata biyyaalessaa ESSLCE fi jireenya itti aanuuf qopheessa.',
+            'school-name': 'Mana Barumsaa Qarsaa',
+            'school-address': 'Magaalaa Qarsaa, Aanaa Muneessa, Godina Arsii Bahaa, Oromiyaa, Itoophiyaa',
+            'quick-links': 'Geessituu saffisaa',
+            'contact-admin': 'Bulchiisa qunnamaa',
+            'phone': 'Bilbila'
+        }
+    };
+
+    let currentLanguage = 'en';
+
+    function setLanguage(lang) {
+        currentLanguage = lang;
+        localStorage.setItem('kersa_lang', lang);
+        applyLanguage();
+        renderPublic(); // re-render dynamic content with language
+    }
+
+    function applyLanguage() {
+        const dict = translations[currentLanguage] || translations.en;
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (dict[key]) el.textContent = dict[key];
+        });
+    }
+
+    // ===== MAGICAL FLOATING ANIMATION GENERATOR =====
+    function createMagicalAnimation() {
+        const container = document.getElementById('magicalFloat');
+        if (!container) return;
+        
+        const sparkleEmojis = ['✨', '⭐', '🌟', '💫', '🔮', '🪄', '✨', '🌟', '💫'];
+        for (let i = 0; i < 20; i++) {
+            const sparkle = document.createElement('div');
+            sparkle.className = 'magical-sparkle';
+            sparkle.textContent = sparkleEmojis[Math.floor(Math.random() * sparkleEmojis.length)];
+            sparkle.style.left = Math.random() * 100 + '%';
+            sparkle.style.top = Math.random() * 100 + '%';
+            sparkle.style.animationDelay = Math.random() * 10 + 's';
+            sparkle.style.animationDuration = Math.random() * 10 + 8 + 's';
+            sparkle.style.fontSize = Math.random() * 15 + 12 + 'px';
+            container.appendChild(sparkle);
+        }
+        
+        const orbColors = ['rgba(242, 169, 59, 0.4)', 'rgba(0, 229, 255, 0.3)', 'rgba(124, 77, 255, 0.3)', 'rgba(0, 230, 118, 0.3)', 'rgba(255, 64, 129, 0.25)'];
+        for (let i = 0; i < 12; i++) {
+            const orb = document.createElement('div');
+            orb.className = 'magical-orb';
+            const size = Math.random() * 60 + 30;
+            orb.style.width = size + 'px';
+            orb.style.height = size + 'px';
+            orb.style.left = Math.random() * 100 + '%';
+            orb.style.top = Math.random() * 100 + '%';
+            orb.style.background = orbColors[Math.floor(Math.random() * orbColors.length)];
+            orb.style.animationDelay = Math.random() * 15 + 's';
+            orb.style.animationDuration = Math.random() * 15 + 12 + 's';
+            container.appendChild(orb);
+        }
+        
+        for (let i = 0; i < 25; i++) {
+            const star = document.createElement('div');
+            star.className = 'magical-star';
+            star.textContent = '✦';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.fontSize = Math.random() * 10 + 6 + 'px';
+            star.style.color = 'rgba(242, 169, 59, 0.7)';
+            star.style.animationDelay = Math.random() * 5 + 's';
+            container.appendChild(star);
+        }
+    }
+
+    // ===== FIXED: Celebration Animation (from top) =====
+    function spawnCelebration() {
+        const heartEmojis = ['❤️', '🧡', '💛', '💚', '💙', '💜', '🩷'];
+        const confettiColors = ['#ff6b6b', '#ffd93d', '#6bcb77', '#4d96ff', '#ff6fb5', '#c47aff'];
+        const screenWidth = window.innerWidth;
+
+        for (let i = 0; i < 20; i++) {
+            const heart = document.createElement('span');
+            heart.className = 'falling-heart';
+            heart.innerHTML = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+            heart.style.left = Math.random() * screenWidth + 'px';
+            heart.style.top = '-30px';
+            heart.style.animationDuration = (1 + Math.random() * 0.8) + 's';
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 2500);
+        }
+
+        for (let i = 0; i < 30; i++) {
+            const confetti = document.createElement('span');
+            confetti.className = 'confetti';
+            confetti.style.left = Math.random() * screenWidth + 'px';
+            confetti.style.top = '-20px';
+            confetti.style.background = confettiColors[Math.floor(Math.random() * confettiColors.length)];
+            confetti.style.animationDuration = (1 + Math.random() * 0.8) + 's';
+            document.body.appendChild(confetti);
+            setTimeout(() => confetti.remove(), 2500);
+        }
+    }
+
+    // Dismiss Splash
+    function dismissSplash() { document.getElementById('splash')?.classList.add('fade-out'); }
+    document.addEventListener('keydown', dismissSplash);
+
+    // Sidebar
+    function openSidebar() { document.getElementById('sidebar')?.classList.add('open'); document.getElementById('sidebarOverlay')?.classList.add('show'); }
+    function closeSidebar() { document.getElementById('sidebar')?.classList.remove('open'); document.getElementById('sidebarOverlay')?.classList.remove('show'); }
+
+    // Learning Animation Subject Info
+    function showSubjectInfo(subject) {
+        const info = {
+            math: '📐 Mathematics: Algebra, Calculus, Geometry, Trigonometry',
+            physics: '⚡ Physics: Mechanics, Electricity, Waves, Modern Physics',
+            chemistry: '🧪 Chemistry: Organic, Inorganic, Physical Chemistry',
+            biology: '🧬 Biology: Cell Biology, Genetics, Human Anatomy',
+            english: '📖 English: Grammar, Literature, Composition',
+            tech: '💻 Technology: Programming, Web Development, IT'
+        };
+        showToast(info[subject] || 'Subject info coming soon!');
+    }
+
+    // Gallery Filter
+    let activeCategoryFilter = 'all';
+    function filterGallery(category, btn) {
+        activeCategoryFilter = category;
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        if(btn) btn.classList.add('active');
+        renderPublic();
+    }
+
+    // Like Image with celebration
+    function likeImage(id) {
+        const gallery = DB.getGallery();
+        const img = gallery.find(g => g.id === id);
+        if (img) {
+            img.likes = (img.likes || 0) + 1;
+            DB.set('gallery', gallery);
+            const countEl = document.getElementById(`like-count-${id}`);
+            if (countEl) countEl.textContent = img.likes;
+            const iconEl = document.getElementById(`like-icon-${id}`);
+            if (iconEl) {
+                iconEl.className = 'fa-solid fa-heart';
+                iconEl.style.color = 'var(--coral)';
+            }
+            spawnCelebration();
+            DB.logActivity('Image liked: ' + img.title);
+        }
+    }
+
+    // Like Story with celebration
+    function likeStory(id) {
+        const stories = DB.getStories();
+        const story = stories.find(s => s.id === id);
+        if (story) {
+            story.likes = (story.likes || 0) + 1;
+            DB.set('stories', stories);
+            const countEl = document.getElementById(`story-like-count-${id}`);
+            if (countEl) countEl.textContent = story.likes;
+            const iconEl = document.getElementById(`story-like-icon-${id}`);
+            if (iconEl) {
+                iconEl.className = 'fa-solid fa-heart';
+                iconEl.style.color = 'var(--coral)';
+            }
+            spawnCelebration();
+            DB.logActivity('Story liked: ' + story.title);
+        }
+    }
+
+    // Toggle Save for Image
+    function toggleSaveImage(id) {
+        let saved = DB.get('savedImages', []);
+        if (!Array.isArray(saved)) saved = [];
+        const index = saved.indexOf(id);
+        if (index > -1) {
+            saved.splice(index, 1);
+            DB.logActivity('Image unsaved');
+        } else {
+            saved.push(id);
+            DB.logActivity('Image saved');
+        }
+        DB.set('savedImages', saved);
+        const iconEl = document.getElementById(`save-icon-${id}`);
+        if (iconEl) {
+            if (saved.includes(id)) {
+                iconEl.className = 'fa-solid fa-bookmark';
+                iconEl.style.color = 'var(--gold)';
+            } else {
+                iconEl.className = 'fa-regular fa-bookmark';
+                iconEl.style.color = '';
+            }
+        }
+    }
+
+    // Toggle Save for Story
+    function toggleSaveStory(id) {
+        let saved = DB.get('savedStories', []);
+        if (!Array.isArray(saved)) saved = [];
+        const index = saved.indexOf(id);
+        if (index > -1) {
+            saved.splice(index, 1);
+            DB.logActivity('Story unsaved');
+        } else {
+            saved.push(id);
+            DB.logActivity('Story saved');
+        }
+        DB.set('savedStories', saved);
+        const iconEl = document.getElementById(`story-save-icon-${id}`);
+        if (iconEl) {
+            if (saved.includes(id)) {
+                iconEl.className = 'fa-solid fa-bookmark';
+                iconEl.style.color = 'var(--gold)';
+            } else {
+                iconEl.className = 'fa-regular fa-bookmark';
+                iconEl.style.color = '';
+            }
+        }
+    }
+
+    // Toggle Comments for Image
+    function toggleComments(id) {
+        const commentsDiv = document.getElementById(`comments-${id}`);
+        if (commentsDiv) {
+            commentsDiv.style.display = commentsDiv.style.display === 'none' ? 'block' : 'none';
+        }
+    }
+
+    // Toggle Comments for Story
+    function toggleStoryComments(id) {
+        const commentsDiv = document.getElementById(`story-comments-${id}`);
+        if (commentsDiv) {
+            commentsDiv.style.display = commentsDiv.style.display === 'none' ? 'block' : 'none';
+        }
+    }
+
+    // Add Comment for Image
+    function addComment(id) {
+        const input = document.getElementById(`comment-input-${id}`);
+        const text = input.value.trim();
+        if (!text) return;
+        const gallery = DB.getGallery();
+        const img = gallery.find(g => g.id === id);
+        if (img) {
+            if (!img.comments) img.comments = [];
+            img.comments.push({ user: 'You', text });
+            DB.set('gallery', gallery);
+            const list = document.getElementById(`comment-list-${id}`);
+            if (list) {
+                list.innerHTML += `<div class="comment-item"><strong>You</strong>: ${text}</div>`;
+            }
+            const countEl = document.getElementById(`comment-count-${id}`);
+            if (countEl) countEl.textContent = img.comments.length;
+            input.value = '';
+            DB.logActivity('Comment added to image: ' + img.title);
+        }
+    }
+
+    // Add Comment for Story
+    function addStoryComment(id) {
+        const input = document.getElementById(`story-comment-input-${id}`);
+        const text = input.value.trim();
+        if (!text) return;
+        const stories = DB.getStories();
+        const story = stories.find(s => s.id === id);
+        if (story) {
+            if (!story.comments) story.comments = [];
+            story.comments.push({ user: 'You', text });
+            DB.set('stories', stories);
+            const list = document.getElementById(`story-comment-list-${id}`);
+            if (list) {
+                list.innerHTML += `<div class="comment-item"><strong>You</strong>: ${text}</div>`;
+            }
+            const countEl = document.getElementById(`story-comment-count-${id}`);
+            if (countEl) countEl.textContent = story.comments.length;
+            input.value = '';
+            DB.logActivity('Comment added to story: ' + story.title);
+        }
+    }
+
+    // Render Public
+    function renderPublic() {
+        const anns = DB.getAnnouncements();
+        const res = DB.getResources();
+        const ach = DB.getAchievements();
+        const gal = DB.getGallery();
+        const stories = DB.getStories();
+
+        const annBox = document.getElementById('publicAnnouncements');
+        if (annBox) annBox.innerHTML = anns.length === 0 ? '<p>No announcements yet.</p>' : anns.slice(0, 6).map(a => `<div class="card"><span class="tag ${a.audience==='students'?'exam':'notice'}">${a.audience||'Notice'}</span><h4>${a.title}</h4><p>${a.body}</p><div class="when">${a.createdAt}</div></div>`).join('');
+
+        const resBox = document.getElementById('publicResources');
+        if (resBox) resBox.innerHTML = res.length === 0 ? '<p>No resources yet.</p>' : res.slice(0, 6).map(r => `<div class="card"><span class="tag notice">${r.type}</span><h4>${r.title}</h4><p>${r.subject} — Grade ${r.grade}</p><div class="when">${r.createdAt}</div></div>`).join('');
+
+        const achBox = document.getElementById('publicAchievements');
+        if (achBox) achBox.innerHTML = ach.length === 0 ? '<p>No achievements yet.</p>' : ach.slice(0, 6).map(a => `<div class="card"><span class="tag event">🏆 Honor</span><h4>${a.title}</h4><p>${a.body}</p><div class="when">${a.createdAt}</div></div>`).join('');
+
+        const catLabels = { students:'🎓 Students', teachers:'👨‍🏫 Teachers', compound:'🏫 Compound', exam:'📝 Exams' };
+        const filteredGal = activeCategoryFilter === 'all' ? gal : gal.filter(g => g.category === activeCategoryFilter);
+        const galBox = document.getElementById('publicGallery');
+        if (galBox) {
+            galBox.innerHTML = filteredGal.length === 0 ? '<p>No gallery images yet.</p>' : filteredGal.map(g => {
+                const likes = g.likes || 0;
+                const comments = g.comments || [];
+                return `
+                <div class="card">
+                    <img src="${g.imageUrl}" alt="${g.title}" style="width:100%; height:auto;">
+                    <span class="tag event">${catLabels[g.category]||g.category}</span>
+                    <h4>${g.title}</h4>
+                    <div class="gallery-actions">
+                        <button class="action-btn" onclick="likeImage(${g.id})">
+                            <i class="fa-regular fa-heart" id="like-icon-${g.id}"></i>
+                            <span id="like-count-${g.id}">${likes}</span>
+                        </button>
+                        <button class="action-btn" onclick="toggleComments(${g.id})">
+                            <i class="fa-regular fa-comment"></i>
+                            <span id="comment-count-${g.id}">${comments.length}</span>
+                        </button>
+                        <button class="action-btn" onclick="toggleSaveImage(${g.id})">
+                            <i class="fa-regular fa-bookmark" id="save-icon-${g.id}"></i>
+                            Save
+                        </button>
+                    </div>
+                    <div id="comments-${g.id}" class="comment-section" style="display:none;">
+                        <div class="comment-list" id="comment-list-${g.id}">
+                            ${comments.map(c => `<div class="comment-item"><strong>${c.user}</strong>: ${c.text}</div>`).join('')}
+                        </div>
+                        <div class="comment-input">
+                            <input type="text" id="comment-input-${g.id}" placeholder="Add a comment...">
+                            <button onclick="addComment(${g.id})">Post</button>
+                        </div>
+                    </div>
+                    <div class="when">Posted ${g.createdAt}</div>
+                </div>
+                `;
+            }).join('');
+        }
+
+        const storyBox = document.getElementById('publicStory');
+        if (storyBox) storyBox.innerHTML = stories.length === 0 ? '<p>Story coming soon.</p>' : stories.map(s => {
+            const likes = s.likes || 0;
+            const comments = s.comments || [];
+            return `<div class="card"><span class="tag event">Official</span><h4>${s.title}</h4><p>${s.body}</p>
+            <div class="story-actions">
+                <button class="action-btn" onclick="likeStory(${s.id})">
+                    <i class="fa-regular fa-heart" id="story-like-icon-${s.id}"></i>
+                    <span id="story-like-count-${s.id}">${likes}</span>
+                </button>
+                <button class="action-btn" onclick="toggleStoryComments(${s.id})">
+                    <i class="fa-regular fa-comment"></i>
+                    <span id="story-comment-count-${s.id}">${comments.length}</span>
+                </button>
+                <button class="action-btn" onclick="toggleSaveStory(${s.id})">
+                    <i class="fa-regular fa-bookmark" id="story-save-icon-${s.id}"></i>
+                    Save
+                </button>
+            </div>
+            <div id="story-comments-${s.id}" class="comment-section" style="display:none;">
+                <div class="comment-list" id="story-comment-list-${s.id}">
+                    ${comments.map(c => `<div class="comment-item"><strong>${c.user}</strong>: ${c.text}</div>`).join('')}
+                </div>
+                <div class="comment-input">
+                    <input type="text" id="story-comment-input-${s.id}" placeholder="Add a comment...">
+                    <button onclick="addStoryComment(${s.id})">Post</button>
+                </div>
+            </div>
+            <div class="when">${s.createdAt}</div></div>`;
+        }).join('');
+    }
+
+    // Student Registration
+    function submitRegistration(e) {
+        if(e) e.preventDefault();
+        const name = document.getElementById('regName')?.value;
+        const grade = document.getElementById('regGrade')?.value;
+        const parent = document.getElementById('regParent')?.value;
+        const phone = document.getElementById('regPhone')?.value;
+        const prev = document.getElementById('regPrevSchool')?.value;
+        if(!name || !parent || !phone) return;
+        DB.saveRegistration({name, grade, parent, phone, prevSchool: prev});
+        document.getElementById('regName').value='';
+        document.getElementById('regParent').value='';
+        document.getElementById('regPhone').value='';
+        document.getElementById('regPrevSchool').value='';
+        showToast('✅ Application submitted!');
+        renderPublic();
+    }
+
+    // Login System
+    let currentRole = 'student';
+    let currentUser = null;
+    let pendingChatAfterLogin = false;
+    
+    function openLogin() { document.getElementById('loginModal')?.classList.add('open'); }
+    function closeLogin() { document.getElementById('loginModal')?.classList.remove('open'); }
+    
+    function openMessageCenter() {
+        if (currentUser) {
+            document.getElementById('publicView')?.classList.add('hidden');
+            document.getElementById('portalDashboard')?.classList.add('active');
+            switchPortalPanel('chat');
+            renderPortal();
+        } else {
+            pendingChatAfterLogin = true;
+            openLogin();
+        }
+    }
+    
+    function setRole(role, element) {
+        currentRole = role;
+        document.querySelectorAll('.role-tab').forEach(t => t.classList.remove('active'));
+        if(element) element.classList.add('active');
+        const profileFields = document.getElementById('profileFields');
+        const uEl = document.getElementById('loginUser');
+        const pEl = document.getElementById('loginPass');
+        
+        if(role === 'admin') {
+            if(profileFields) profileFields.style.display = 'none';
+            if(uEl) uEl.value = '';
+            if(pEl) pEl.value = '';
+        } else {
+            if(profileFields) profileFields.style.display = 'grid';
+            if(uEl) uEl.value = '';
+            if(pEl) pEl.value = '';
+        }
+        
+        document.getElementById('loginFullName').value = '';
+        document.getElementById('loginPhone').value = '';
+        document.getElementById('loginEmail').value = '';
+    }
+
+    function portalLogin() {
+        const username = document.getElementById('loginUser')?.value.trim();
+        const password = document.getElementById('loginPass')?.value.trim();
+        
+        if(!username || !password) {
+            showToast('❌ Please enter username and password');
+            return;
+        }
+        
+        if(currentRole === 'admin') {
+            if(username === 'admin' && password === 'admin123') {
+                currentUser = {username: 'admin', role: 'admin', fullName: 'Administrator'};
+                closeLogin();
+                document.getElementById('publicView')?.classList.add('hidden');
+                document.getElementById('adminDashboard')?.classList.add('active');
+                renderAdmin();
+                showToast('✅ Admin logged in');
+                pendingChatAfterLogin = false;
+                return;
+            } else {
+                showToast('❌ Invalid admin credentials');
+                return;
+            }
+        }
+        
+        const fullName = document.getElementById('loginFullName')?.value.trim();
+        const phone = document.getElementById('loginPhone')?.value.trim();
+        const email = document.getElementById('loginEmail')?.value.trim();
+        
+        if(!fullName || !phone || !email) {
+            showToast('❌ Please fill in all profile fields');
+            return;
+        }
+        
+        currentUser = {username, role: currentRole, fullName, phone, email};
+        DB.saveUser(currentUser);
+        
+        closeLogin();
+        document.getElementById('publicView')?.classList.add('hidden');
+        document.getElementById('portalDashboard')?.classList.add('active');
+        
+        if (pendingChatAfterLogin) {
+            switchPortalPanel('chat');
+            pendingChatAfterLogin = false;
+        } else {
+            switchPortalPanel('chat');
+        }
+        
+        renderPortal();
+        showToast(`✅ Welcome ${fullName}!`);
+    }
+
+    function logoutDashboard() {
+        document.getElementById('adminDashboard')?.classList.remove('active');
+        document.getElementById('portalDashboard')?.classList.remove('active');
+        document.getElementById('publicView')?.classList.remove('hidden');
+        currentUser = null;
+        pendingChatAfterLogin = false;
+        renderPublic();
+        updateFooter();
+        showToast('👋 Logged out');
+    }
+
+    // Admin Panel Switcher
+    function switchAdminPanel(name) {
+        document.querySelectorAll('#adminDashboard .navitem').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('#adminDashboard .dashboard-panel').forEach(p => p.classList.remove('active'));
+        document.querySelector(`#adminDashboard .navitem[data-panel="${name}"]`)?.classList.add('active');
+        document.getElementById('panel-' + name)?.classList.add('active');
+        if (name === 'settings') {
+            const settings = DB.getSettings();
+            document.getElementById('settingsPhone').value = settings.phone;
+            document.getElementById('settingsYear').value = settings.copyrightYear;
+        }
+        if (name === 'logs') {
+            renderActivityLogs();
+        }
+        if (name === 'ai-api') {
+            const ai = DB.getAISettings();
+            document.getElementById('aiApiEndpoint').value = ai.endpoint;
+            document.getElementById('aiApiKey').value = ai.apiKey;
+            document.getElementById('aiModel').value = ai.model;
+        }
+    }
+
+    function renderActivityLogs() {
+        const logs = DB.getActivityLogs();
+        const box = document.getElementById('adminLogBox');
+        if (box) {
+            box.innerHTML = logs.length === 0 ? '[SYSTEM LOG] No activity yet.' : logs.map(log => `[${log.time}] ${log.message}`).join('<br>');
+        }
+    }
+
+    // Portal Panel Switcher
+    function switchPortalPanel(name) {
+        document.querySelectorAll('#portalDashboard .navitem').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('#portalDashboard .dashboard-panel').forEach(p => p.classList.remove('active'));
+        document.querySelector(`#portalDashboard .navitem[data-portal-panel="${name}"]`)?.classList.add('active');
+        document.getElementById('portal-panel-' + name)?.classList.add('active');
+    }
+
+    // Render Admin
+    function renderAdmin() {
+        const regs = DB.getRegistrations();
+        const users = DB.getUsers();
+        const anns = DB.getAnnouncements();
+        const res = DB.getResources();
+        const gal = DB.getGallery();
+        const stories = DB.getStories();
+        const reviews = DB.getReviews();
+        const meetings = DB.getMeetings();
+        const pending = regs.filter(r => r.status === 'pending');
+
+        document.getElementById('dashPendingCount').textContent = pending.length;
+        document.getElementById('dashAnnouncements').textContent = anns.length;
+        document.getElementById('dashResources').textContent = res.length;
+        document.getElementById('dashImages').textContent = gal.length;
+        document.getElementById('dashUsers').textContent = users.length;
+        document.getElementById('dashReviews').textContent = reviews.length;
+        document.getElementById('regBadge').textContent = pending.length;
+        document.getElementById('pendingAppsBadge').textContent = `${pending.length} Pending`;
+
+        const regList = document.getElementById('adminRegList');
+        if(regList) regList.innerHTML = regs.length === 0 ? '<div class="box">No applications yet.</div>' : regs.map(r => `<div class="box"><div style="display:flex; justify-content:space-between;"><b>${r.name} (${r.grade})</b><span class="pill ${r.status}">${r.status}</span></div><div>Parent: ${r.parent} | Phone: <input type="text" value="${r.phone}" style="width:140px;" onchange="updatePhone(${r.id}, this.value)"></div>${r.status==='pending'?`<div><button class="rowbtn" onclick="decideReg(${r.id},'approved')">✅ Approve</button><button class="rowbtn" onclick="decideReg(${r.id},'rejected')">❌ Reject</button></div>`:''}</div>`).join('');
+
+        const usersList = document.getElementById('adminUsersList');
+        if(usersList) usersList.innerHTML = users.length === 0 ? '<div class="box">No registered users yet.</div>' : users.map(u => `<div class="box"><div style="display:flex; justify-content:space-between;"><b>${u.fullName}</b><span class="pill approved">${u.role}</span></div><div>📞 ${u.phone} | ✉️ ${u.email} | 🆔 ${u.username}</div></div>`).join('');
+
+        const annList = document.getElementById('adminAnnList');
+        if(annList) annList.innerHTML = anns.map(a => `<div class="box" style="display:flex; justify-content:space-between;"><div><b>${a.title}</b><div>${a.body}</div></div><button class="rowbtn" onclick="deleteAnn(${a.id})">🗑️</button></div>`).join('');
+
+        const resList = document.getElementById('adminResList');
+        if(resList) resList.innerHTML = res.map(r => `<div class="box" style="display:flex; justify-content:space-between;"><div><b>${r.title}</b><div>${r.type} - ${r.subject} (Grade ${r.grade})</div></div><button class="rowbtn" onclick="deleteRes(${r.id})">🗑️</button></div>`).join('');
+
+        const imgList = document.getElementById('adminImgList');
+        if(imgList) imgList.innerHTML = gal.map(g => `<div class="box" style="display:flex; justify-content:space-between;"><div style="display:flex; gap:12px; align-items:center;"><img src="${g.imageUrl}" style="width:54px; height:42px; object-fit:cover; border-radius:6px;"><div><b>${g.title}</b><div>${g.category}</div></div></div><button class="rowbtn" onclick="deleteImg(${g.id})">🗑️</button></div>`).join('');
+
+        const storyList = document.getElementById('adminStoryList');
+        if(storyList) storyList.innerHTML = stories.map(s => `<div class="box" style="display:flex; justify-content:space-between;"><div><b>${s.title}</b><div>${s.body}</div></div><button class="rowbtn" onclick="deleteStory(${s.id})">🗑️</button></div>`).join('');
+
+        const reviewList = document.getElementById('adminReviewList');
+        if(reviewList) reviewList.innerHTML = reviews.length === 0 ? '<div class="box">No reviews yet.</div>' : reviews.map(r => `<div class="box" style="display:flex; justify-content:space-between;"><div><b>${r.name}</b> - ${r.rating} Stars<div>${r.text}</div></div><button class="rowbtn" onclick="deleteReview(${r.id})">🗑️</button></div>`).join('');
+
+        const meetList = document.getElementById('adminMeetingList');
+        if(meetList) meetList.innerHTML = meetings.length === 0 ? '<div class="box">No meetings scheduled.</div>' : meetings.map(m => `<div class="box" style="display:flex; justify-content:space-between;"><div><b>${m.title}</b><div>${m.time}</div></div><div><button class="rowbtn" onclick="window.open('${m.url}', '_blank')">🔗 Join</button><button class="rowbtn" onclick="deleteMeeting(${m.id})">🗑️ Delete</button></div></div>`).join('');
+    }
+
+    // Render Portal
+    function renderPortal() {
+        const roleTitle = document.getElementById('portalRoleTitle');
+        if(roleTitle) roleTitle.textContent = `${currentRole.toUpperCase()} PORTAL`;
+        
+        const header = document.getElementById('portalHeader');
+        if(header) header.textContent = `${currentUser?.fullName || currentRole.toUpperCase()} — Message Center`;
+
+        const threadBox = document.getElementById('portalThreadList');
+        if(threadBox) {
+            let threads = [];
+            const allUsers = DB.getUsers();
+            
+            if(currentRole === 'student') {
+                const teachers = allUsers.filter(u => u.role === 'teacher');
+                threads = teachers.length > 0 ? teachers.map(t => t.fullName) : ['No teachers registered yet'];
+            } else if(currentRole === 'teacher') {
+                const students = allUsers.filter(u => u.role === 'student');
+                threads = students.length > 0 ? students.map(s => s.fullName) : ['No students registered yet'];
+            }
+            
+            threadBox.innerHTML = threads.map(t => `<div class="thread" onclick="selectThread('${t}')"><b>${t}</b></div>`).join('');
+            if(threads.length > 0 && threads[0] !== 'No teachers registered yet' && threads[0] !== 'No students registered yet') {
+                selectThread(threads[0]);
+            }
+        }
+
+        const meetBox = document.getElementById('portalMeetingList');
+        if(meetBox) {
+            const meetings = DB.getMeetings();
+            meetBox.innerHTML = meetings.length === 0 ? '<div class="box">No virtual meetings scheduled.</div>' : meetings.map(m => `<div class="box"><b>${m.title}</b><div>${m.time}</div><button class="btn btn-primary btn-sm" onclick="window.open('${m.url}', '_blank')">Join</button></div>`).join('');
+        }
+    }
+
+    let activeThreadTarget = '';
+    function selectThread(name) {
+        activeThreadTarget = name;
+        const head = document.getElementById('portalConvHead');
+        if(head) head.textContent = `Chat with ${name}`;
+        
+        const convBody = document.getElementById('portalConvBody');
+        if(convBody) {
+            const msgs = DB.getMessages().filter(m => 
+                (m.sender === currentUser?.fullName && m.receiver === name) || 
+                (m.sender === name && m.receiver === currentUser?.fullName)
+            );
+            convBody.innerHTML = msgs.length === 0 ? `<div class="bubble in">Start conversation with ${name}</div>` : msgs.map(m => `<div class="bubble ${m.sender === currentUser?.fullName ? 'out' : 'in'}"><strong>${m.sender}:</strong> ${m.text}</div>`).join('');
+        }
+    }
+
+    function sendPortalMsg() {
+        const input = document.getElementById('portalMsgInput');
+        if(!input) return;
+        const text = input.value.trim();
+        if(!text || !activeThreadTarget || !currentUser) return;
+        
+        DB.saveMessage({
+            sender: currentUser.fullName,
+            receiver: activeThreadTarget,
+            text,
+            timestamp: new Date().toLocaleTimeString()
+        });
+        
+        input.value = '';
+        selectThread(activeThreadTarget);
+    }
+
+    // AI Tutor with API integration
+    async function askKersaAI() {
+        const input = document.getElementById('aiQuestionInputPane');
+        const box = document.getElementById('aiChatBoxPane');
+        if(!input || !box) return;
+        const q = input.value.trim();
+        if(!q) return;
+        
+        box.innerHTML += `<div class="bubble out">${q}</div>`;
+        input.value = '';
+        box.scrollTop = box.scrollHeight;
+        
+        const aiSettings = DB.getAISettings();
+        if (aiSettings.apiKey && aiSettings.endpoint) {
+            try {
+                const response = await fetch(aiSettings.endpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${aiSettings.apiKey}`
+                    },
+                    body: JSON.stringify({
+                        model: aiSettings.model || 'gpt-3.5-turbo',
+                        messages: [{ role: 'user', content: q }]
+                    })
+                });
+                const data = await response.json();
+                const reply = data.choices?.[0]?.message?.content || 'No response from API.';
+                box.innerHTML += `<div class="bubble in"><strong>🤖 API:</strong><br>${reply}</div>`;
+            } catch (err) {
+                const fallback = generateAIAnswer(q);
+                box.innerHTML += `<div class="bubble in"><strong>🤖 Kersa AI (fallback):</strong><br>${fallback}</div>`;
+            }
+        } else {
+            setTimeout(() => {
+                const reply = generateAIAnswer(q);
+                box.innerHTML += `<div class="bubble in"><strong>🤖 Kersa AI v2.0:</strong><br>${reply}</div>`;
+                box.scrollTop = box.scrollHeight;
+            }, 500);
+        }
+        DB.logActivity('AI question asked: ' + q.substring(0, 50));
+        box.scrollTop = box.scrollHeight;
+    }
+
+    function generateAIAnswer(q) {
+        const lower = q.toLowerCase();
+        if(lower.includes('math')) return '📐 Mathematics: Algebra, Calculus, Geometry. Try solving equations step-by-step!';
+        if(lower.includes('physics')) return '⚡ Physics: F=ma, V=IR, E=mc². Ask me about any formula!';
+        if(lower.includes('chemistry')) return '🧪 Chemistry: Chemical reactions, periodic table, organic chemistry.';
+        if(lower.includes('biology')) return '🧬 Biology: Cell biology, genetics, human anatomy, ecology.';
+        if(lower.includes('math magic')) return '📐 MATH MAGIC: Quadratic formula, Pythagorean theorem, trigonometric identities!';
+        if(lower.includes('physics formula')) return '⚡ PHYSICS: Force (F=ma), Energy (E=½mv²), Ohm\'s Law (V=IR)!';
+        if(lower.includes('chemistry reaction')) return '🧪 CHEMISTRY: Synthesis, decomposition, single/double replacement!';
+        if(lower.includes('biology cell')) return '🧬 BIOLOGY: Cell theory, organelles, mitosis, meiosis!';
+        return `For "${q}": I can help with Mathematics, Physics, Chemistry, Biology, English, and more!`;
+    }
+
+    // Virtual Meeting
+    function createMeeting() {
+        const title = prompt('Meeting Title:');
+        if(!title) return;
+        const time = prompt('Time:') || 'Now';
+        const room = 'KersaRoom-' + Math.floor(Math.random()*10000);
+        DB.saveMeeting({title, time, url:`https://meet.jit.si/${room}`});
+        if(currentRole === 'admin') renderAdmin();
+        renderPortal();
+        showToast('✅ Virtual class scheduled!');
+    }
+
+    function deleteMeeting(id) {
+        DB.deleteMeeting(id);
+        renderAdmin();
+        showToast('✅ Meeting deleted');
+    }
+
+    // Multiple image upload preview
+    function previewImages(input) {
+        const container = document.getElementById('imagePreviewContainer');
+        if (!container) return;
+        container.innerHTML = '';
+        if (input.files) {
+            for (let i = 0; i < input.files.length; i++) {
+                const file = input.files[i];
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.style.maxWidth = '100px';
+                    img.style.maxHeight = '100px';
+                    img.style.objectFit = 'contain';
+                    img.style.borderRadius = '6px';
+                    img.style.margin = '5px';
+                    container.appendChild(img);
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+    }
+
+    // Upload multiple images
+    function addImages() {
+        const title = document.getElementById('adminImgTitle')?.value.trim();
+        if(!title) return;
+        const category = document.getElementById('adminImgCat')?.value;
+        const fileInput = document.getElementById('adminImgFile');
+        
+        if(fileInput.files && fileInput.files.length > 0) {
+            let loadedCount = 0;
+            for (let i = 0; i < fileInput.files.length; i++) {
+                const file = fileInput.files[i];
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const imageUrl = e.target.result;
+                    DB.saveGalleryImage({title, category, imageUrl});
+                    loadedCount++;
+                    if (loadedCount === fileInput.files.length) {
+                        document.getElementById('adminImgTitle').value='';
+                        fileInput.value='';
+                        document.getElementById('imagePreviewContainer').innerHTML='';
+                        renderAdmin();
+                        renderPublic();
+                        showToast('✅ Photos uploaded!');
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        } else {
+            showToast('❌ Please select at least one image file');
+        }
+    }
+
+    // Admin Actions
+    function updatePhone(id, phone) { DB.updateRegPhone(id, phone); showToast('✅ Phone updated'); }
+    function decideReg(id, status) { DB.updateRegistration(id, status); renderAdmin(); renderPublic(); showToast(status==='approved'?'✅ Approved':'❌ Rejected'); }
+    function publishAnnouncement() {
+        const title = document.getElementById('adminAnnTitle')?.value.trim();
+        if(!title) return;
+        const body = document.getElementById('adminAnnBody')?.value.trim();
+        const audience = document.getElementById('adminAnnAudience')?.value;
+        DB.saveAnnouncement({title, body, audience});
+        document.getElementById('adminAnnTitle').value='';
+        document.getElementById('adminAnnBody').value='';
+        renderAdmin(); renderPublic();
+        showToast('✅ Published!');
+    }
+    function addResource() {
+        const title = document.getElementById('adminResTitle')?.value.trim();
+        if(!title) return;
+        const type = document.getElementById('adminResType')?.value;
+        const subject = document.getElementById('adminResSubject')?.value.trim() || 'General';
+        const grade = document.getElementById('adminResGrade')?.value;
+        DB.saveResource({title, type, subject, grade});
+        document.getElementById('adminResTitle').value='';
+        document.getElementById('adminResSubject').value='';
+        renderAdmin(); renderPublic();
+        showToast('✅ Resource uploaded!');
+    }
+    function addAchievement() {
+        const title = document.getElementById('adminAchTitle')?.value.trim();
+        if(!title) return;
+        const body = document.getElementById('adminAchBody')?.value.trim();
+        DB.saveAchievement({title, body});
+        document.getElementById('adminAchTitle').value='';
+        document.getElementById('adminAchBody').value='';
+        renderAdmin(); renderPublic();
+        showToast('✅ Achievement posted!');
+    }
+    function saveStory() {
+        const title = document.getElementById('adminStoryTitle')?.value.trim();
+        if(!title) return;
+        const body = document.getElementById('adminStoryBody')?.value.trim();
+        DB.saveStory({title, body});
+        renderAdmin(); renderPublic();
+        showToast('✅ Story published!');
+    }
+    function submitReview() {
+        const name = document.getElementById('reviewName')?.value.trim();
+        const rating = document.getElementById('reviewRating')?.value;
+        const text = document.getElementById('reviewText')?.value.trim();
+        if(!name || !text) return;
+        DB.saveReview({name, rating, text});
+        document.getElementById('reviewName').value='';
+        document.getElementById('reviewText').value='';
+        renderAdmin();
+        showToast('✅ Review submitted!');
+    }
+    function deleteAnn(id) { DB.deleteAnnouncement(id); renderAdmin(); renderPublic(); }
+    function deleteRes(id) { DB.deleteResource(id); renderAdmin(); renderPublic(); }
+    function deleteAch(id) { DB.deleteAchievement(id); renderAdmin(); renderPublic(); }
+    function deleteImg(id) { DB.deleteGalleryImage(id); renderAdmin(); renderPublic(); }
+    function deleteStory(id) { DB.deleteStory(id); renderAdmin(); renderPublic(); }
+    function deleteReview(id) { DB.deleteReview(id); renderAdmin(); }
+
+    // Update System Settings
+    function updateSystemSettings() {
+        const phone = document.getElementById('settingsPhone')?.value.trim();
+        const year = document.getElementById('settingsYear')?.value.trim();
+        if (!phone || !year) {
+            showToast('❌ Please fill in all settings fields');
+            return;
+        }
+        DB.saveSettings({ phone, copyrightYear: year });
+        updateFooter();
+        renderAdmin();
+        showToast('✅ System settings updated!');
+    }
+
+    // AI Settings save
+    function saveAISettings() {
+        const endpoint = document.getElementById('aiApiEndpoint')?.value.trim();
+        const apiKey = document.getElementById('aiApiKey')?.value.trim();
+        const model = document.getElementById('aiModel')?.value;
+        if (!endpoint || !apiKey) {
+            showToast('❌ Endpoint and API key required');
+            return;
+        }
+        DB.saveAISettings({ endpoint, apiKey, model });
+        showToast('✅ AI settings saved');
+    }
+
+    function updateFooter() {
+        const settings = DB.getSettings();
+        const footerPhone = document.getElementById('footer-phone');
+        const footerYear = document.getElementById('footer-year');
+        if (footerPhone) footerPhone.textContent = settings.phone;
+        if (footerYear) footerYear.textContent = settings.copyrightYear;
+    }
+
+    function showToast(msg) {
+        const t = document.getElementById('toast');
+        if(!t) return;
+        t.textContent = msg;
+        t.classList.add('show');
+        setTimeout(() => t.classList.remove('show'), 2500);
+    }
+
+    // Privacy / Terms
+    function openPrivacy() { document.getElementById('privacyModal').classList.add('open'); }
+    function openTerms() { document.getElementById('termsModal').classList.add('open'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+    // Secret Admin Access (Hidden from UI)
+    window.addEventListener('hashchange', () => {
+        if(location.hash === '#admin') {
+            openLogin();
+            setRole('admin');
+            document.getElementById('adminTab').style.display = 'block';
+        }
+    });
+
+    document.addEventListener('keydown', e => {
+        if(e.ctrlKey && e.shiftKey && e.key === 'A') {
+            e.preventDefault();
+            openLogin();
+            setRole('admin');
+            document.getElementById('adminTab').style.display = 'block';
+        }
+    });
+
+    let footerClicks = 0, footerTimer;
+    document.addEventListener('DOMContentLoaded', () => {
+        const footSec = document.getElementById('footerSecret');
+        if(footSec) footSec.addEventListener('click', () => {
+            footerClicks++;
+            clearTimeout(footerTimer);
+            footerTimer = setTimeout(() => footerClicks = 0, 1500);
+            if(footerClicks === 3) {
+                footerClicks = 0;
+                openLogin();
+                setRole('admin');
+                document.getElementById('adminTab').style.display = 'block';
+            }
+        });
+        // Load language
+        const savedLang = localStorage.getItem('kersa_lang') || 'en';
+        currentLanguage = savedLang;
+        document.getElementById('langSelect').value = savedLang;
+        applyLanguage();
+        renderPublic();
+        updateFooter();
+        createMagicalAnimation();
+    });
+</script>
+
+</body>
+</html>
